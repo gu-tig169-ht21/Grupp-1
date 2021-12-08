@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1079458116718",
+    "project_id": "quiz-master-b51c2",
+    "storage_bucket": "quiz-master-b51c2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1079458116718:android:e65f9db84a15bba8bf227f",
+        "android_client_info": {
+          "package_name": "com.guQuiz.quizapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1079458116718-rpses0cinmhtfrqo4i996hobvlapm8db.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmhQcS9ME5-xAI-2kOPVjisGXqZHCZWwU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1079458116718-rpses0cinmhtfrqo4i996hobvlapm8db.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

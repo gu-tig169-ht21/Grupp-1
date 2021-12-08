@@ -6,13 +6,10 @@ const url =
     "https://opentdb.com/api.php?amount=2&category=21&difficulty=easy&type=multiple";
 
 class QuizService {
-  //Länk:
-
 //Get a quiz question
   static Future<List<Question>> getQuiz() async {
     var response = await http.get(Uri.parse(url));
     String bodyString = response.body;
-    print(bodyString);
     var json = jsonDecode(bodyString);
 
     var quest = jsonDecode(response.body)['results'] as List;

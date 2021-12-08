@@ -59,7 +59,7 @@ class _RegisterState extends State<Register> {
                     Navigator.pop(context);
                   },
                   child: const Text(
-                    'Registrera ny användare',
+                    'Registrera',
                     style: TextStyle(color: Colors.white, fontSize: 20),
                   ),
                   style: ButtonStyle(

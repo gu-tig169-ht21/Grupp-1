@@ -79,7 +79,7 @@ class _SignInState extends State<SignIn> {
                         MaterialPageRoute(builder: (context) => Register()));
                   },
                   child: const Text(
-                    'Registrera ny användare',
+                    'Registrera',
                     style: TextStyle(color: Colors.white, fontSize: 20),
                   ),
                   style: ButtonStyle(

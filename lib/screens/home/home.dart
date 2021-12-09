@@ -22,12 +22,12 @@ class Home extends StatelessWidget {
         actions: [
           TextButton.icon(
               onPressed: () => _auth.signOut(),
-              icon: Icon(Icons.person),
-              label: Text('Log out')),
+              icon: Icon(Icons.person, color: Colors.white),
+              label: Text('Log out', style: TextStyle(color: Colors.white))),
           TextButton.icon(
               onPressed: () => state.getQuiz(),
-              icon: Icon(Icons.person),
-              label: Text('Get Quiz')),
+              icon: Icon(Icons.quiz, color: Colors.orange),
+              label: Text('Get Quiz', style: TextStyle(color: Colors.orange))),
         ],
       ),
       body: Consumer<QuizModel>(builder: (context, state, child) {
@@ -37,6 +37,7 @@ class Home extends StatelessWidget {
             itemBuilder: (context, index) {
               return ListTile(
                 title: Text(quizList[index].question),
+                subtitle: Text(quizList[index].correct_answer),
                 leading: Text(quizList[index].category),
               );
             });

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:quizapp/services/quiz_service.dart';
 
@@ -41,7 +39,19 @@ class Question {
 }
 
 class QuizModel extends ChangeNotifier {
+  //List of Question objects
   List<Question> quizList = [];
+
+  //Data from user for type of quiz to API
+  String? pickedCategory = 'Slumpa';
+  var categoryList = ['Slumpa', 'Sports', 'Animals'];
+  String? pickedDifficulty = 'Easy';
+  var difficultyList = ['Easy', 'Medium', 'Hard'];
+
+  //Method to try choicePicker.
+  void playGame() {
+    print("{Categori: ${pickedCategory}, Difficulty: ${pickedDifficulty}}");
+  }
 
   //Getter for list
   List<Question> get getQuizList => quizList;

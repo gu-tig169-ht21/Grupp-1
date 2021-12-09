@@ -1,53 +1,84 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:quizapp/models/quiz.dart';
 
 class NewGame extends StatelessWidget {
-  NewGame({Key? key}) : super(key: key);
-
-  String initialCategory = "Slumpa";
-  List<String> category = ["Sports", "Animals", "Art"];
-  List<String> difficulty = ["Easy", "Medium", "Hard"];
-
-  void setChoices(String value) {}
+  const NewGame({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          DropdownPicker(
-            initialValue: initialCategory,
-            listItems: category,
-            setChoices: setChoices,
+    var state = Provider.of<QuizModel>(context, listen: false);
+
+    String category;
+    String difficulty;
+
+    void setCategory(String value) {
+      category = value;
+      state.pickedCategory = value;
+    }
+
+    void setDifficulty(String value) {
+      difficulty = value;
+      state.pickedDifficulty = value;
+    }
+
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("New Game"),
+          centerTitle: true,
+        ),
+        body: Container(
+          child: Column(
+            children: [
+              QuizTypePicker(
+                  pickedValue: state.pickedCategory,
+                  valueList: state.categoryList,
+                  setValue: setCategory),
+              QuizTypePicker(
+                pickedValue: state.pickedDifficulty,
+                valueList: state.difficultyList,
+                setValue: setDifficulty,
+              ),
+              TextButton(
+                  onPressed: () {
+                    state.playGame();
+                  },
+                  child: const Text('Spela')),
+            ],
           ),
-        ],
-      ),
-    );
+        ));
   }
 }
 
-class DropdownPicker extends StatelessWidget {
-  List<String> listItems;
-  String initialValue;
-  Function setChoices;
-  DropdownPicker(
+class QuizTypePicker extends StatefulWidget {
+  QuizTypePicker(
       {Key? key,
-      required this.initialValue,
-      required this.listItems,
-      required this.setChoices})
+      required this.pickedValue,
+      required this.valueList,
+      required this.setValue})
       : super(key: key);
+  String? pickedValue;
+  var valueList;
+  Function setValue;
 
+  @override
+  _QuizTypePickerState createState() => _QuizTypePickerState();
+}
+
+class _QuizTypePickerState extends State<QuizTypePicker> {
   @override
   Widget build(BuildContext context) {
     return DropdownButton(
-      value: initialValue,
-      icon: const Icon(Icons.arrow_drop_down),
-      elevation: 16,
-      style: const TextStyle(color: Colors.white),
-      onChanged: (newValue) {
-        setChoices(newValue);
+      value: widget.pickedValue,
+      onChanged: (String? newValue) {
+        setState(() {
+          widget.pickedValue = newValue;
+          widget.setValue(newValue);
+        });
       },
-      items: listItems.map((value) {
-        return DropdownMenuItem(
+      items: widget.valueList.map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
           value: value,
           child: Text(value),
         );

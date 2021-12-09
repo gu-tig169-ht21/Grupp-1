@@ -1,5 +1,4 @@
 // ignore_for_file: unused_element
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
@@ -28,11 +27,7 @@ class Highscore extends StatelessWidget {
           textHeaderOne(),
           yourScore(),
           textHeaderTwo(),
-          highscore("Ellebasi"),
-          highscore("Joel"),
-          highscore("Jonas"),
-          highscore("Viktor"),
-          highscore("Anton"),
+          highscore(),
         ],
       ),
     );
@@ -54,7 +49,7 @@ class Highscore extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: Container(
         width: double.infinity,
-        height: 100,
+        height: 70,
         decoration: BoxDecoration(
           color: Colors.white,
           border: Border.all(
@@ -63,9 +58,17 @@ class Highscore extends StatelessWidget {
           ),
           borderRadius: BorderRadius.circular(10),
         ),
-        child: Center(
-            child: Text("1.Ellebasi",
-                style: TextStyle(fontSize: 40, color: Colors.black))),
+        child: ListTile(
+          title: Text("Ellebasi",
+              style: TextStyle(fontSize: 40, color: Colors.black)),
+          leading: Icon(
+            Icons.stars,
+            color: Colors.orange,
+            size: 40,
+          ),
+          trailing: Text('100 p',
+              style: TextStyle(fontSize: 30, color: Colors.black)),
+        ),
       ),
     );
   }
@@ -81,24 +84,41 @@ class Highscore extends StatelessWidget {
     );
   }
 
-  Widget highscore(String namn) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-      child: Container(
-        width: double.infinity,
-        height: 50,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(
-            color: Colors.black,
-            width: 5,
-          ),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Center(
-            child: Text(namn,
-                style: TextStyle(fontSize: 20, color: Colors.black))),
-      ),
-    );
+  Widget highscore() {
+    final List<String> item = <String>[
+      'A',
+      'B',
+      'C',
+      'D',
+      'E',
+      'F',
+      'G',
+      'H',
+      'I',
+      'J'
+    ];
+    //final List<int> colorCodes = <int>[600, 500, 100, 600, 500, 100];
+    int number = 0;
+
+    return Expanded(
+        child: ListView.separated(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      itemCount: item.length,
+      itemBuilder: (BuildContext context, int index) {
+        return ListTile(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          selected: true,
+          selectedTileColor: Colors.orange,
+          title: Text('Item ${item[index]}',
+              style: TextStyle(fontSize: 20, color: Colors.white)),
+          leading:
+              Text('1', style: TextStyle(fontSize: 20, color: Colors.white)),
+          trailing:
+              Text('50 p', style: TextStyle(fontSize: 20, color: Colors.white)),
+        );
+      },
+      separatorBuilder: (BuildContext context, int index) => const Divider(),
+    ));
   }
 }

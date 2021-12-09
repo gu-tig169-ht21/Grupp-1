@@ -37,7 +37,15 @@ class Home extends StatelessWidget {
             itemBuilder: (context, index) {
               return ListTile(
                 title: Text(quizList[index].question),
-                leading: Text(quizList[index].category),
+                leading: Text(quizList[index].difficulty),
+                subtitle: Column(
+                  children: [
+                    Text(quizList[index].correct_answer),
+                    Text(quizList[index].incorrect_answers[0]),
+                    Text(quizList[index].incorrect_answers[1]),
+                    Text(quizList[index].incorrect_answers[2])
+                  ],
+                ),
               );
             });
       }),

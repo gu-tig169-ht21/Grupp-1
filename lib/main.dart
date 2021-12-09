@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
+import 'package:quizapp/models/quiz.dart';
 import 'package:quizapp/models/user.dart';
 import 'package:quizapp/screens/home/home.dart';
 import 'package:quizapp/screens/authentication/sign_in.dart';
@@ -21,9 +22,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<User?>.value(
-      value: AuthService().authChanges,
-      initialData: null,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<QuizModel>(create: (context) => QuizModel()),
+        StreamProvider<User?>.value(
+          value: AuthService().authChanges,
+          initialData: null,
+        )
+      ],
       child: MaterialApp(
         home: Wrapper(),
         theme: ThemeData(

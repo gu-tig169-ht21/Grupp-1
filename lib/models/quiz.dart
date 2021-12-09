@@ -41,14 +41,18 @@ class Question {
 }
 
 class QuizModel extends ChangeNotifier {
-  List<Question> _quizList = [];
+  List<Question> quizList = [];
 
   //Getter for list
-  List<Question> get quizList => _quizList;
+  List<Question> get getQuizList => quizList;
 
 //Metod för att anropa service
   void getQuiz() async {
-    _quizList = await QuizService.getQuiz();
+    quizList = await QuizService.getQuiz();
+    print("Get quiz ran");
+    for (var item in quizList) {
+      print(item.toString());
+    }
     notifyListeners();
   }
 }

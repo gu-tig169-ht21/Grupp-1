@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/screens/authentication/sign_in.dart';
 import 'package:quizapp/screens/home/home.dart';
+import 'package:quizapp/screens/quiz/new_game.dart';
 
 class Wrapper extends StatelessWidget {
   const Wrapper({Key? key}) : super(key: key);
@@ -14,7 +15,7 @@ class Wrapper extends StatelessWidget {
     if (user == null) {
       return SignIn();
     } else {
-      return Home();
+      return NewGame();
     }
   }
 }

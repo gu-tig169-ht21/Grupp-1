@@ -15,7 +15,7 @@ class Wrapper extends StatelessWidget {
     if (user == null) {
       return SignIn();
     } else {
-      return NewGame();
+      return Home();
     }
   }
 }

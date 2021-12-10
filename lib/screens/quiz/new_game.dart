@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/models/quiz.dart';
+import 'package:quizapp/screens/quiz/game.dart';
 
 class NewGame extends StatelessWidget {
   const NewGame({Key? key}) : super(key: key);
@@ -41,8 +42,10 @@ class NewGame extends StatelessWidget {
                 setValue: setDifficulty,
               ),
               TextButton(
-                  onPressed: () {
-                    state.playGame();
+                  onPressed: () async {
+                    await state.getQuiz();
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => GameUI()));
                   },
                   child: const Text('Spela')),
             ],

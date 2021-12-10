@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:quizapp/models/quiz.dart';
 
 const url =
-    "https://opentdb.com/api.php?amount=2&category=21&difficulty=easy&type=multiple";
+    "https://opentdb.com/api.php?amount=3&category=21&difficulty=easy&type=multiple";
 
 class QuizService {
 //Get a quiz question

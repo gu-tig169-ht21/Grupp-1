@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:quizapp/services/quiz_service.dart';
 
 class Question {
@@ -8,7 +9,6 @@ class Question {
   String question;
   String correct_answer;
   List<dynamic> incorrect_answers;
-
   List<String> answers = [];
 
   Question(
@@ -40,10 +40,12 @@ class Question {
 
 class QuizModel extends ChangeNotifier {
   //List of Question objects
-  List<Question> quizList = [];
+  List<Question> questionList = [];
+  int _points = 0;
+  Color newColor = Colors.grey;
 
   //Data from user for type of quiz to API
-  String? pickedCategory = 'Slumpa';
+  String pickedCategory = 'Slumpa';
   var categoryList = ['Slumpa', 'Sports', 'Animals'];
   String? pickedDifficulty = 'Easy';
   var difficultyList = ['Easy', 'Medium', 'Hard'];
@@ -54,15 +56,67 @@ class QuizModel extends ChangeNotifier {
   }
 
   //Getter for list
-  List<Question> get getQuizList => quizList;
+  List<Question> get getQuizList => questionList;
+  int get points => _points;
+  Color get newColors => newColor;
 
 //Metod för att anropa service
-  void getQuiz() async {
-    quizList = await QuizService.getQuiz();
-    print("Get quiz ran");
-    for (var item in quizList) {
-      print(item.toString());
+  Future<void> getQuiz() async {
+    questionList = await QuizService.getQuiz();
+
+    for (var item in questionList) {
+      item.answers.add(item.correct_answer);
+
+      for (var i = 0; i < item.incorrect_answers.length; i++) {
+        item.answers.add(item.incorrect_answers[i]);
+      }
     }
+
+    for (var item in questionList) {
+      print(item.answers.toString());
+    }
+
+//Reset for new game
+    counter = 0;
+    _points = 0;
+    newColor = Colors.black;
+  }
+
+//////////////////////////GAME LOGIC//////////////////////
+  ///
+  ///
+
+//Index for consumer
+  int counter = 0;
+  Question game() {
+    //notifyListeners();
+    return questionList[counter];
+  }
+
+  void nextQuestion(String value) async {
+    if (value == questionList[counter].correct_answer) {
+      _points = _points + 1;
+      newColor = Colors.green;
+    } else {
+      newColor = Colors.red;
+    }
+
+    print(_points);
+    counter++;
+
+    await Future.delayed(const Duration(seconds: 2));
+
+//Timer
+    //game();
+
     notifyListeners();
+
+/*
+    if (counter == questionList.length) {
+      counter = 0;
+      notifyListeners();
+    }
+
+    */
   }
 }

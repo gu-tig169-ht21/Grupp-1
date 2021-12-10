@@ -15,9 +15,13 @@ class Highscore extends StatelessWidget {
         actions: [
           TextButton.icon(
               onPressed: () {},
-              icon: Icon(Icons.score, color: Colors.orange),
+              icon: Icon(
+                Icons.keyboard_arrow_right,
+                color: Colors.orange,
+                size: 30,
+              ),
               label: Text(
-                'TRYCK PÅ MAJ',
+                'Your scores',
                 style: TextStyle(color: Colors.orange),
               )),
         ],
@@ -38,7 +42,7 @@ class Highscore extends StatelessWidget {
       padding: const EdgeInsets.all(15.0),
       child: Column(
         children: [
-          Text('Your score', style: TextStyle(fontSize: 30)),
+          Text('Your best score', style: TextStyle(fontSize: 30)),
         ],
       ),
     );
@@ -85,35 +89,23 @@ class Highscore extends StatelessWidget {
   }
 
   Widget highscore() {
-    final List<String> item = <String>[
-      'A',
-      'B',
-      'C',
-      'D',
-      'E',
-      'F',
-      'G',
-      'H',
-      'I',
-      'J'
-    ];
-    //final List<int> colorCodes = <int>[600, 500, 100, 600, 500, 100];
-    int number = 0;
+    final itemNumbers = [for (var i = 1; i <= 10; i++) i];
+    final numbers = [for (var i = 1; i <= 10; i++) i];
 
     return Expanded(
         child: ListView.separated(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-      itemCount: item.length,
+      itemCount: itemNumbers.length,
       itemBuilder: (BuildContext context, int index) {
         return ListTile(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           selected: true,
           selectedTileColor: Colors.orange,
-          title: Text('Item ${item[index]}',
+          title: Text('Best points ${itemNumbers[index]}',
               style: TextStyle(fontSize: 20, color: Colors.white)),
-          leading:
-              Text('1', style: TextStyle(fontSize: 20, color: Colors.white)),
+          leading: Text('${numbers[index]}',
+              style: TextStyle(fontSize: 25, color: Colors.white)),
           trailing:
               Text('50 p', style: TextStyle(fontSize: 20, color: Colors.white)),
         );

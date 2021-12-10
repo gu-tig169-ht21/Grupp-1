@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
         )
       ],
       child: MaterialApp(
-        home: Wrapper(),
+        home: Highscore(),
         theme: ThemeData(
           // Theme settings
           brightness: Brightness.dark,

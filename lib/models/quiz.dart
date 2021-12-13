@@ -50,15 +50,15 @@ class QuizModel extends ChangeNotifier {
   String? pickedDifficulty = 'Easy';
   var difficultyList = ['Easy', 'Medium', 'Hard'];
 
-  //Method to try choicePicker.
-  void playGame() {
-    print("{Categori: ${pickedCategory}, Difficulty: ${pickedDifficulty}}");
-  }
-
   //Getter for list
   List<Question> get getQuizList => questionList;
   int get points => _points;
   Color get newColors => newColor;
+
+//Method to try choicePicker.
+  void playGame() {
+    print("{Categori: ${pickedCategory}, Difficulty: ${pickedDifficulty}}");
+  }
 
 //Metod för att anropa service
   Future<void> getQuiz() async {

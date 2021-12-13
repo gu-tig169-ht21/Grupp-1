@@ -44,6 +44,7 @@ class GameUI extends StatelessWidget {
                         child: Ink(
                           color: state.newColor,
                           child: ListTile(
+                            
                               title: Text(state.game().answers[index]),
                               onTap: () {
                                 state.newColor = Colors.blue;

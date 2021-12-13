@@ -83,8 +83,6 @@ class QuizModel extends ChangeNotifier {
   }
 
 //////////////////////////GAME LOGIC//////////////////////
-  ///
-  ///
 
 //Index for consumer
   int counter = 0;

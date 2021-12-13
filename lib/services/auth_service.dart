@@ -1,32 +1,47 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:quizapp/models/user.dart';
+import 'package:quizapp/services/user_service.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
+final FirebaseFirestore databaseReference = FirebaseFirestore.instance;
 
 class AuthService {
-  Stream<User?> get authChanges {
-    return _auth.authStateChanges().map((user) => user);
+  //Create custom user from Firebase User
+  AuthUser? _fromFirebaseUserTocustomUser(User? user) {
+    return user != null
+        ? AuthUser(
+            uid: user.uid,
+          )
+        : null;
+  }
+
+  Stream<AuthUser?> get authUser {
+    return _auth
+        .authStateChanges()
+        .map((user) => _fromFirebaseUserTocustomUser(user));
   }
 
   //Logga in
 
-  Future<User?> signIn(email, password) async {
+  Future signIn(email, password) async {
     UserCredential result = await _auth.signInWithEmailAndPassword(
         email: email, password: password);
     User? user = result.user;
-
-    //userState.signedIn(value: true);
-    return user;
   }
+
+  // Create a CollectionReference called users that references the firestore collection
 
   //Registrera mail + lösen
 
-  Future registerWithWEmail(email, password) async {
+  Future registerWithWEmail(UserData customUser) async {
     UserCredential result = await _auth.createUserWithEmailAndPassword(
-        email: email, password: password);
+        email: customUser.email, password: customUser.password);
 
     User? user = result.user;
-    print(user);
+    customUser.id = user!.uid;
+
+    //_userService.registerUser(customUser);
   }
 
   Future<void> signOut() async {

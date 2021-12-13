@@ -1,43 +1,59 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/rendering.dart';
+import 'package:quizapp/models/user.dart';
+import 'package:quizapp/services/user_service.dart';
 
 class Profile extends StatelessWidget {
   const Profile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Quizmaster', style: Theme.of(context).textTheme.headline4),
-        actions: [
-          TextButton.icon(
-              onPressed: () {},
-              icon: Icon(
-                Icons.person,
-                color: Colors.orange,
-                size: 30,
+    AuthUser user = Provider.of<AuthUser>(context);
+
+    return StreamBuilder<UserData?>(
+        stream: UserService(uid: user.uid).userData,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            UserData? userData = snapshot.data;
+            return Scaffold(
+              appBar: AppBar(
+                title: Text('Quizmaster',
+                    style: Theme.of(context).textTheme.headline4),
+                actions: [
+                  TextButton.icon(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.person,
+                        color: Colors.orange,
+                        size: 30,
+                      ),
+                      label: const Text(
+                        'Scores',
+                        style: TextStyle(color: Colors.orange),
+                      )),
+                ],
               ),
-              label: Text(
-                'Scores',
-                style: TextStyle(color: Colors.orange),
-              )),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            textHeader('Your profile'),
-            informationHolder(context),
-            textHeader('Update profile'),
-            nameBox(),
-            emailBox(),
-            passwordBox(),
-          ],
-        ),
-      ),
-    );
+              body: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Text(userData),
+                    textHeader('Your profile'),
+                    informationHolder(context),
+                    textHeader('Update profile'),
+                    nameBox(),
+                    emailBox(),
+                    passwordBox(),
+                  ],
+                ),
+              ),
+            );
+          }
+
+          return Text("HEj");
+        });
   }
 
   Widget textHeader(String text) {
@@ -52,7 +68,7 @@ class Profile extends StatelessWidget {
   }
 
   Widget informationHolder(context) {
-    var state = Provider.of<User>(context);
+    var state = Provider.of<AuthUser?>(context);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -69,8 +85,8 @@ class Profile extends StatelessWidget {
         ),
         child: Column(
           children: [
-            tileFormat('Full name:', 'Isabelle Löfvendahl'),
-            tileFormat('Email address:', '${state.email}'),
+            tileFormat('User name:', ""),
+            tileFormat('Email address:', ""),
             tileFormat('Password', obscureText('123456')),
           ],
         ),
@@ -78,7 +94,7 @@ class Profile extends StatelessWidget {
     );
   }
 
-  String obscureText(String text){
+  String obscureText(String text) {
     return text.replaceAll(RegExp(r"."), "*");
   }
 

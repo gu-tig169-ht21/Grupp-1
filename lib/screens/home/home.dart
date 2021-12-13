@@ -6,6 +6,7 @@ import 'package:quizapp/models/user.dart';
 import 'package:quizapp/screens/quiz/new_game.dart';
 import 'package:quizapp/services/auth_service.dart';
 import 'package:quizapp/services/quiz_service.dart';
+import 'package:quizapp/services/user_service.dart';
 
 class Home extends StatelessWidget {
   Home({Key? key}) : super(key: key);
@@ -34,17 +35,17 @@ class Home extends StatelessWidget {
       body: Consumer<QuizModel>(builder: (context, state, child) {
         List<Question> quizList = state.getQuizList;
         return Container(
-          child: Column(children: [
-            TextButton(onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => NewGame()));
-            }, child: Text("New Game")),
+            child: Column(
+          children: [
+            TextButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => NewGame()));
+                },
+                child: Text("New Game")),
           ],
-          )
-        
+        ));
+      }),
     );
-      }
-    ),
-      );
-    
   }
 }

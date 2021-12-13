@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:quizapp/services/quiz_service.dart';
+import 'dart:async';
 
 class Question {
   String category;
@@ -42,7 +42,13 @@ class QuizModel extends ChangeNotifier {
   //List of Question objects
   List<Question> questionList = [];
   int _points = 0;
-  Color newColor = Colors.grey;
+  Color _color = Colors.grey;
+  //Index for consumer
+  int counter = 0;
+  Timer? nextQuestionTimer;
+  Timer? questionTimer;
+  var _timeCounter = 10;
+  var _newGameCounter = 10;
 
   //Data from user for type of quiz to API
   String pickedCategory = 'Slumpa';
@@ -53,7 +59,9 @@ class QuizModel extends ChangeNotifier {
   //Getter for list
   List<Question> get getQuizList => questionList;
   int get points => _points;
-  Color get newColors => newColor;
+  Color get color => _color;
+  int get timeCounter => _timeCounter;
+  int get newGameCounter => _newGameCounter;
 
 //Method to try choicePicker.
   void playGame() {
@@ -63,6 +71,7 @@ class QuizModel extends ChangeNotifier {
 //Metod för att anropa service
   Future<void> getQuiz() async {
     questionList = await QuizService.getQuiz();
+    _countDown();
 
     for (var item in questionList) {
       item.answers.add(item.correct_answer);
@@ -70,6 +79,7 @@ class QuizModel extends ChangeNotifier {
       for (var i = 0; i < item.incorrect_answers.length; i++) {
         item.answers.add(item.incorrect_answers[i]);
       }
+      item.answers.shuffle();
     }
 
     for (var item in questionList) {
@@ -79,44 +89,72 @@ class QuizModel extends ChangeNotifier {
 //Reset for new game
     counter = 0;
     _points = 0;
-    newColor = Colors.black;
   }
 
 //////////////////////////GAME LOGIC//////////////////////
   ///
   ///
+  ///
 
-//Index for consumer
-  int counter = 0;
   Question game() {
     //notifyListeners();
     return questionList[counter];
   }
 
-  void nextQuestion(String value) async {
+  void checkAnswer(String value) {
+    _timeCounter = 0;
+    questionTimer?.cancel();
+    _nextQuestionCountDown();
+
     if (value == questionList[counter].correct_answer) {
-      _points = _points + 1;
-      newColor = Colors.green;
+      _points += 1;
+      _color = Colors.green;
     } else {
-      newColor = Colors.red;
+      _color = Colors.red;
     }
-
-    print(_points);
-    counter++;
-
-    await Future.delayed(const Duration(seconds: 2));
-
-//Timer
-    //game();
-
     notifyListeners();
 
-/*
-    if (counter == questionList.length) {
-      counter = 0;
-      notifyListeners();
-    }
+    //nextQuestion();
+  }
 
-    */
+  void nextQuestion() {
+    counter++;
+    _color = Colors.grey;
+
+    notifyListeners();
+  }
+
+  void _countDown() {
+    questionTimer = Timer.periodic(
+        Duration(
+          seconds: 1,
+        ), (Timer timer) {
+      if (_timeCounter == 0) {
+        _nextQuestionCountDown();
+        questionTimer?.cancel();
+      } else {
+        _timeCounter--;
+        notifyListeners();
+      }
+    });
+  }
+
+  void _nextQuestionCountDown() {
+    nextQuestionTimer = Timer.periodic(
+        Duration(
+          seconds: 1,
+        ), (timer) {
+      if (_newGameCounter == 0) {
+        _color = Colors.grey;
+        nextQuestion();
+        _newGameCounter = 10;
+        _timeCounter = 10;
+        _countDown();
+        nextQuestionTimer?.cancel();
+      } else {
+        _newGameCounter--;
+        notifyListeners();
+      }
+    });
   }
 }

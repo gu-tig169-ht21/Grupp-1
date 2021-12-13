@@ -1,33 +1,61 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/models/quiz.dart';
+import 'package:quizapp/screens/home/highscore.dart';
+import 'package:quizapp/screens/home/home.dart';
+import 'package:quizapp/screens/quiz/game_score.dart';
 
 class GameUI extends StatelessWidget {
-  const GameUI({Key? key}) : super(key: key);
+  GameUI({Key? key}) : super(key: key);
+  String selected = "";
 
   @override
   Widget build(BuildContext context) {
-    List list = ['Hej', 'Då', 'Re', 'Hejdå'];
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        actions: [
-          TextButton(
-            onPressed: () {},
-            child: Text('Press me!'),
-          )
-        ],
-        title:
-            Text('Quiz Master', style: Theme.of(context).textTheme.headline1),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          headerWidget(context),
-          questionWidget(context),
-          answerWidgets(context, list),
-        ],
-      ),
+    var state = Provider.of<QuizModel>(context, listen: false);
+
+    return Consumer<QuizModel>(
+      builder: (context, state, child) => state.counter ==
+              state.questionList.length
+          ? GameScore()
+          : Scaffold(
+              appBar: AppBar(
+                centerTitle: true,
+                actions: [
+                  TextButton(
+                    onPressed: () async {
+                      await state.getQuiz();
+                    },
+                    child: Text('Press me!'),
+                  )
+                ],
+                title: Text('Quiz Master',
+                    style: Theme.of(context).textTheme.headline1),
+              ),
+              body: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(state.game().question),
+                  ListView.builder(
+                    itemCount: state.game().answers.length,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 20, bottom: 20),
+                        child: Ink(
+                          color: state.newColor,
+                          child: ListTile(
+                              title: Text(state.game().answers[index]),
+                              onTap: () {
+                                state.newColor = Colors.blue;
+                                state.nextQuestion(state.game().answers[index]);
+                              }),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
     );
   }
 
@@ -71,7 +99,7 @@ class GameUI extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.only(left: 20, right: 20),
           child: Text(
-            'Category: Sport',
+            state.pickedCategory,
             style: TextStyle(
               fontSize: 15,
             ),
@@ -93,47 +121,6 @@ class GameUI extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget questionWidget(context) {
-    return Consumer<QuizModel>(
-      builder: (context, state, child) => Container(
-        margin: EdgeInsets.all(30),
-        padding: EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          border: Border.all(
-            width: 20,
-            color: Colors.orangeAccent,
-          ),
-        ),
-        child: Text(
-          'What is the air speed velocity of an unladen swallow?',
-          style: TextStyle(
-            fontSize: 20,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget answerWidgets(context, list) {
-    return Consumer<QuizModel>(
-      builder: (context, state, child) => ListView.builder(
-        itemCount: list.length,
-        shrinkWrap: true,
-        physics: ScrollPhysics(),
-        itemBuilder: (BuildContext context, int index) {
-          return Padding(
-            padding: const EdgeInsets.only(top: 20, bottom: 20),
-            child: ListTile(
-              leading: Text('Index'),
-              title: Text('Answer'),
-              onTap: () => Provider.of(context, listen: false).doSomething,
-            ),
-          );
-        },
       ),
     );
   }

@@ -28,21 +28,21 @@ class Highscore extends StatelessWidget {
       ),
       body: Column(
         children: [
-          textHeaderOne(),
+          textHeader('Your best score'),
           yourScore(),
-          textHeaderTwo(),
+          textHeader('Highscore'),
           highscore(),
         ],
       ),
     );
   }
 
-  Widget textHeaderOne() {
+  Widget textHeader(String text) {
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: Column(
         children: [
-          Text('Your best score', style: TextStyle(fontSize: 30)),
+          Text(text, style: TextStyle(fontSize: 30)),
         ],
       ),
     );
@@ -73,17 +73,6 @@ class Highscore extends StatelessWidget {
           trailing: Text('100 p',
               style: TextStyle(fontSize: 30, color: Colors.black)),
         ),
-      ),
-    );
-  }
-
-  Widget textHeaderTwo() {
-    return Padding(
-      padding: const EdgeInsets.all(15.0),
-      child: Column(
-        children: [
-          Text('Highscore', style: TextStyle(fontSize: 30)),
-        ],
       ),
     );
   }

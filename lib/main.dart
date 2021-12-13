@@ -9,6 +9,7 @@ import 'package:quizapp/screens/home/highscore.dart';
 import 'package:quizapp/screens/home/home.dart';
 import 'package:quizapp/screens/authentication/sign_in.dart';
 import 'package:quizapp/screens/authentication/register.dart';
+import 'package:quizapp/screens/home/profile.dart';
 import 'package:quizapp/screens/wrapper.dart';
 import 'package:quizapp/services/auth_service.dart';
 
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
         )
       ],
       child: MaterialApp(
-        home: Highscore(),
+        home: Wrapper(),
         theme: ThemeData(
           // Theme settings
           brightness: Brightness.dark,

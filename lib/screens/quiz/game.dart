@@ -42,18 +42,15 @@ class GameUI extends StatelessWidget {
                         itemBuilder: (context, index) {
                           return Padding(
                             padding: const EdgeInsets.only(top: 20, bottom: 20),
-                            child: Ink(
-                              color: state.color,
-                              child: ListTile(
-                                  title: Text(state.game().answers[index]),
-                                  onTap: () {
-                                    state.color;
-                                    state.timeCounter != 0
-                                        ? state.checkAnswer(
-                                            state.game().answers[index])
-                                        : null;
-                                  }),
-                            ),
+                            child: ListTile(
+                                selectedColor: state.game().answerColor,
+                                title: Text(state.game().answers[index]),
+                                onTap: () {
+                                  state.timeCounter != 0
+                                      ? state.checkAnswer(
+                                          state.game().answers[index])
+                                      : null;
+                                }),
                           );
                         },
                       ),
@@ -131,5 +128,28 @@ class GameUI extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Color? cellColorForGameStateAndAnswer(GameState state, bool isCorrectAnswer) {
+    switch (state) {
+      case GameState.IsPlaying:
+        {
+          return Colors.grey;
+        }
+
+      case GameState.AnsweredCorrectly:
+        {
+          return Colors.green;
+        }
+
+      case GameState.AnsweredInCorrectly:
+        {
+          return Colors.red;
+        }
+      default:
+        {
+          GameState.None;
+        }
+    }
   }
 }

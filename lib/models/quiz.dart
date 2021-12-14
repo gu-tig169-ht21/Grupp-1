@@ -2,6 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:quizapp/services/quiz_service.dart';
 import 'dart:async';
 
+enum GameState {
+  None,
+  IsPlaying,
+  AnsweredCorrectly,
+  AnsweredInCorrectly,
+}
+
 class Question {
   String category;
   String type;
@@ -10,6 +17,7 @@ class Question {
   String correct_answer;
   List<dynamic> incorrect_answers;
   List<String> answers = [];
+  Color answerColor = Colors.grey;
 
   Question(
       {required this.category,
@@ -40,10 +48,9 @@ class Question {
 
 class QuizModel extends ChangeNotifier {
   //List of Question objects
+  GameState state = GameState.None;
   List<Question> questionList = [];
   int _points = 0;
-  Color _color = Colors.grey;
-  //Index for consumer
   int counter = 0;
   Timer? nextQuestionTimer;
   Timer? questionTimer;
@@ -59,7 +66,7 @@ class QuizModel extends ChangeNotifier {
   //Getter for list
   List<Question> get getQuizList => questionList;
   int get points => _points;
-  Color get color => _color;
+  //Color get color => _color;
   int get timeCounter => _timeCounter;
   int get newGameCounter => _newGameCounter;
 
@@ -108,9 +115,8 @@ class QuizModel extends ChangeNotifier {
 
     if (value == questionList[counter].correct_answer) {
       _points += 1;
-      _color = Colors.green;
     } else {
-      _color = Colors.red;
+      game().answerColor = Colors.green;
     }
     notifyListeners();
 
@@ -119,9 +125,6 @@ class QuizModel extends ChangeNotifier {
 
   void nextQuestion() {
     counter++;
-    _color = Colors.grey;
-
-    notifyListeners();
   }
 
   void _countDown() {
@@ -134,8 +137,8 @@ class QuizModel extends ChangeNotifier {
         questionTimer?.cancel();
       } else {
         _timeCounter--;
-        notifyListeners();
       }
+      notifyListeners();
     });
   }
 
@@ -145,16 +148,16 @@ class QuizModel extends ChangeNotifier {
           seconds: 1,
         ), (timer) {
       if (_newGameCounter == 0) {
-        _color = Colors.grey;
         nextQuestion();
         _newGameCounter = 10;
         _timeCounter = 10;
         _countDown();
         nextQuestionTimer?.cancel();
+        game().answerColor = Colors.grey;
       } else {
         _newGameCounter--;
-        notifyListeners();
       }
+      notifyListeners();
     });
   }
 }

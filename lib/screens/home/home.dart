@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/models/quiz.dart';
 import 'package:quizapp/models/user.dart';
+import 'package:quizapp/screens/home/highscore.dart';
+import 'package:quizapp/screens/home/profile.dart';
 import 'package:quizapp/screens/quiz/new_game.dart';
 import 'package:quizapp/services/auth_service.dart';
 import 'package:quizapp/services/quiz_service.dart';
@@ -33,18 +35,32 @@ class Home extends StatelessWidget {
       ),
       body: Consumer<QuizModel>(builder: (context, state, child) {
         List<Question> quizList = state.getQuizList;
-        return Container(
-          child: Column(children: [
-            TextButton(onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => NewGame()));
-            }, child: Text("New Game")),
+        return Row(
+          children: [
+            TextButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => NewGame()));
+              },
+              child: Text("New Game"),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Profile()));
+              },
+              child: Text("Profile"),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Highscore()));
+              },
+              child: Text("Highscore"),
+            )
           ],
-          )
-        
+        );
+      }),
     );
-      }
-    ),
-      );
-    
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quizapp/models/user.dart';
 import 'package:quizapp/services/auth_service.dart';
 
 class Register extends StatefulWidget {
@@ -9,10 +10,12 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
+  String displayName = "";
   String email = "";
   String password = "";
 
   AuthService _auth = AuthService();
+  UserState _state = UserState();
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +31,17 @@ class _RegisterState extends State<Register> {
         child: Form(
           child: Column(
             children: [
+              TextFormField(
+                onChanged: (value) {
+                  displayName = value;
+                },
+                decoration: const InputDecoration(
+                    icon: Icon(Icons.email, color: Colors.amber),
+                    labelText: "Display Name",
+                    fillColor: Colors.black,
+                    filled: true),
+              ),
+              const SizedBox(height: 10),
               TextFormField(
                 onChanged: (value) {
                   email = value;
@@ -55,7 +69,11 @@ class _RegisterState extends State<Register> {
                 margin: const EdgeInsets.only(top: 5),
                 child: TextButton(
                   onPressed: () {
-                    _auth.registerWithWEmail(email, password);
+                    _state.register(UserData(
+                        id: "",
+                        displayName: displayName,
+                        email: email,
+                        password: password));
                     Navigator.pop(context);
                   },
                   child: const Text(

@@ -1,40 +1,70 @@
 // ignore_for_file: unused_element
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
+import 'package:quizapp/models/user.dart';
+import 'package:quizapp/services/user_service.dart';
 
 class Highscore extends StatelessWidget {
   const Highscore({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    AuthUser user = Provider.of<AuthUser>(context);
+
     return Scaffold(
-      appBar: AppBar(
-        title:
-            Text('Quiz Master', style: Theme.of(context).textTheme.headline4),
-        actions: [
-          TextButton.icon(
-              onPressed: () {},
-              icon: Icon(
-                Icons.keyboard_arrow_right,
-                color: Colors.orange,
-                size: 30,
-              ),
-              label: Text(
-                'Your scores',
-                style: TextStyle(color: Colors.orange),
-              )),
-        ],
-      ),
-      body: Column(
-        children: [
-          textHeader('Your best score'),
-          yourScore(),
-          textHeader('Highscore'),
-          highscore(),
-        ],
-      ),
-    );
+        appBar: AppBar(
+          title:
+              Text('Quiz Master', style: Theme.of(context).textTheme.headline4),
+          actions: [
+            TextButton.icon(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.keyboard_arrow_right,
+                  color: Colors.orange,
+                  size: 30,
+                ),
+                label: Text(
+                  'Your scores',
+                  style: TextStyle(color: Colors.orange),
+                )),
+          ],
+        ),
+        body: StreamBuilder<QuerySnapshot>(
+            stream: UserService(uid: user.uid).getUserHighScore(),
+            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (!snapshot.hasData) {
+                return const Text("Loading...");
+              }
+              final data = snapshot.data!.docs;
+              String currentUser = "";
+              int currentUserScore = 0;
+
+              for (var item in data) {
+                if (item['id'] == user.uid) {
+                  currentUser = item['UserName'];
+                  currentUserScore = item['HighScore'];
+                }
+              }
+              return Column(
+                children: [
+                  textHeader("HighScore"),
+                  yourScore(currentUser, currentUserScore),
+                  Expanded(
+                    child: ListView.separated(
+                        separatorBuilder: (BuildContext context, int index) =>
+                            const Divider(),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 20),
+                        itemCount: snapshot.data!.docs.length,
+                        itemBuilder: (context, index) {
+                          return highscore(snapshot.data!.docs[index]);
+                        }),
+                  ),
+                ],
+              );
+            }));
   }
 
   Widget textHeader(String text) {
@@ -48,7 +78,7 @@ class Highscore extends StatelessWidget {
     );
   }
 
-  Widget yourScore() {
+  Widget yourScore(String currentUser, int currentUserScore) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: Container(
@@ -63,43 +93,29 @@ class Highscore extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
         ),
         child: ListTile(
-          title: Text("Ellebasi",
-              style: TextStyle(fontSize: 40, color: Colors.black)),
-          leading: Icon(
+          title:
+              Text(currentUser, style: TextStyle(fontSize: 40, color: Colors.black)),
+          leading: const Icon(
             Icons.stars,
             color: Colors.orange,
             size: 40,
           ),
-          trailing: Text('100 p',
+          trailing: Text('${currentUserScore} p',
               style: TextStyle(fontSize: 30, color: Colors.black)),
         ),
       ),
     );
   }
 
-  Widget highscore() {
-    final itemNumbers = [for (var i = 1; i <= 10; i++) i];
-    final numbers = [for (var i = 1; i <= 10; i++) i];
-
-    return Expanded(
-        child: ListView.separated(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-      itemCount: itemNumbers.length,
-      itemBuilder: (BuildContext context, int index) {
-        return ListTile(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-          selected: true,
-          selectedTileColor: Colors.orange,
-          title: Text('Best points ${itemNumbers[index]}',
-              style: TextStyle(fontSize: 20, color: Colors.white)),
-          leading: Text('${numbers[index]}',
-              style: TextStyle(fontSize: 25, color: Colors.white)),
-          trailing:
-              Text('50 p', style: TextStyle(fontSize: 20, color: Colors.white)),
-        );
-      },
-      separatorBuilder: (BuildContext context, int index) => const Divider(),
-    ));
+  Widget highscore(DocumentSnapshot document) {
+    return ListTile(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+      selected: true,
+      selectedTileColor: Colors.orange,
+      title: Text('${document["UserName"]}',
+          style: TextStyle(fontSize: 20, color: Colors.white)),
+      trailing: Text("${document["HighScore"]}",
+          style: TextStyle(fontSize: 20, color: Colors.white)),
+    );
   }
 }

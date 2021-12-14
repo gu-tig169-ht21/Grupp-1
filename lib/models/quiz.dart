@@ -92,9 +92,6 @@ class QuizModel extends ChangeNotifier {
   }
 
 //////////////////////////GAME LOGIC//////////////////////
-  ///
-  ///
-  ///
 
   Question game() {
     //notifyListeners();

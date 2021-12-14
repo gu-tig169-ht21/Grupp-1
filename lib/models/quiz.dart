@@ -2,6 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:quizapp/services/quiz_service.dart';
 import 'dart:async';
 
+enum GameState {
+  None,
+  IsPlaying,
+  AnsweredCorrectly,
+  AnsweredInCorrectly,
+}
+
+class Answer {
+  bool? isCorrect;
+
+  Answer({required this.isCorrect});
+}
+
 class Question {
   String category;
   String type;
@@ -43,7 +56,7 @@ class QuizModel extends ChangeNotifier {
   List<Question> questionList = [];
   int _points = 0;
   Color _color = Colors.grey;
-  //Index for consumer
+
   int counter = 0;
   Timer? nextQuestionTimer;
   Timer? questionTimer;
@@ -58,8 +71,8 @@ class QuizModel extends ChangeNotifier {
 
   //Getter for list
   List<Question> get getQuizList => questionList;
+  Color get colors => _color;
   int get points => _points;
-  Color get color => _color;
   int get timeCounter => _timeCounter;
   int get newGameCounter => _newGameCounter;
 
@@ -117,8 +130,6 @@ class QuizModel extends ChangeNotifier {
   void nextQuestion() {
     counter++;
     _color = Colors.grey;
-
-    notifyListeners();
   }
 
   void _countDown() {
@@ -127,12 +138,12 @@ class QuizModel extends ChangeNotifier {
           seconds: 1,
         ), (Timer timer) {
       if (_timeCounter == 0) {
-        _nextQuestionCountDown();
         questionTimer?.cancel();
+        _nextQuestionCountDown();
       } else {
         _timeCounter--;
-        notifyListeners();
       }
+      notifyListeners();
     });
   }
 
@@ -144,14 +155,14 @@ class QuizModel extends ChangeNotifier {
       if (_newGameCounter == 0) {
         _color = Colors.grey;
         nextQuestion();
+        nextQuestionTimer?.cancel();
         _newGameCounter = 10;
         _timeCounter = 10;
         _countDown();
-        nextQuestionTimer?.cancel();
       } else {
         _newGameCounter--;
-        notifyListeners();
       }
+      notifyListeners();
     });
   }
 }

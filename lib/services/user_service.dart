@@ -19,51 +19,32 @@ class UserService {
     });
   }
 
-  //Get User data
-  Future<UserData> getUserInformation(String id) async {
-    var result = await databaseReference.collection("users").doc(id).get();
-
-    UserData user = UserData(
-      id: result['id'],
-      displayName: result['UserName'],
-      email: result['email'],
-    );
-    return user;
+  //Get users document by ID (Current user)
+  Stream<DocumentSnapshot> getUserInformation() {
+    return databaseReference.collection("users").doc(uid).snapshots();
   }
 
-  UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
-    return UserData(
-        id: uid,
-        displayName: snapshot.data['name'],
-        email: snapshot.data['email'],
-        score: snapshot.data["ss"]);
+  //Get all users HighScore
+  Stream<QuerySnapshot> getUserHighScore() {
+    return databaseReference.collection("users").orderBy('HighScore', descending: true).snapshots();
   }
 
-  Stream<UserData?> get userData {
+
+  //Update userData (DisplayName)
+  Future<void> updateUserName(String displayName)  {
     return databaseReference
         .collection("users")
         .doc(uid)
-        .snapshots()
-        .map(_userDataFromSnapshot);
+        .update({"UserName": displayName});
   }
 
-  //Update userData
-  Future updateUserScore(UserData? user) async {
-    return await databaseReference
+   //Update userData (HighScore)
+  Future<void> updateHighScore(int score)  {
+    return databaseReference
         .collection("users")
-        .doc(user!.id)
-        .update({"HighScore": user.score});
+        .doc(uid)
+        .update({"HighScore": FieldValue.increment(score)});
   }
 
-/*Future<void> updateUser(user) {
-  return users
-  .collection("users")
-  .doc(user!.displayName)
-  .update({'Username': value})
-  .then((value) => print("User updated"))
-  .catchError((error) => print("Failed to update user: $error"));
-} */
-
-  //Delete user?
 
 }

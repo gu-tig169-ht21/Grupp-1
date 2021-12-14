@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:quizapp/models/user.dart';
 import 'package:quizapp/screens/authentication/register.dart';
 import 'package:quizapp/screens/authentication/sign_in.dart';
+import 'package:quizapp/screens/home/highscore.dart';
 import 'package:quizapp/screens/home/home.dart';
 import 'package:quizapp/screens/home/profile.dart';
 import 'package:quizapp/screens/quiz/new_game.dart';

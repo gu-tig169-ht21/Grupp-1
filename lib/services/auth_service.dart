@@ -33,7 +33,6 @@ class AuthService {
   // Create a CollectionReference called users that references the firestore collection
 
   //Registrera mail + lösen
-
   Future registerWithWEmail(UserData customUser) async {
     UserCredential result = await _auth.createUserWithEmailAndPassword(
         email: customUser.email, password: customUser.password);
@@ -41,7 +40,12 @@ class AuthService {
     User? user = result.user;
     customUser.id = user!.uid;
 
-    //_userService.registerUser(customUser);
+    await databaseReference.collection("users").doc(customUser.id).set({
+      "id": customUser.id,
+      "email": customUser.email,
+      "UserName": customUser.displayName,
+      "HighScore": customUser.score
+    });
   }
 
   Future<void> signOut() async {

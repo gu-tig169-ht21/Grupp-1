@@ -15,7 +15,7 @@ class UserData {
   String displayName;
   String email;
   String password;
-  int score;
+  int? score;
 
   UserData(
       {required this.id,

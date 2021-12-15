@@ -12,52 +12,54 @@ class GameUI extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var state = Provider.of<QuizModel>(context, listen: false);
-
+    bool selected = false;
     return Consumer<QuizModel>(
-      builder: (context, state, child) =>
-          state.counter == state.questionList.length
-              ? GameScore()
-              : Scaffold(
-                  appBar: AppBar(
-                    centerTitle: true,
-                    actions: [
-                      TextButton(
-                        onPressed: () async {
-                          await state.getQuiz();
-                        },
-                        child: Text('Press me!'),
-                      )
-                    ],
-                    title: Text('Quiz Master',
-                        style: Theme.of(context).textTheme.headline1),
+      builder: (context, state, child) => state.counter ==
+              state.questionList.length
+          ? GameScore()
+          : Scaffold(
+              appBar: AppBar(
+                centerTitle: true,
+                actions: [
+                  TextButton(
+                    onPressed: () async {
+                      await state.getQuiz();
+                    },
+                    child: Text('Press me!'),
+                  )
+                ],
+                title: Text('Quiz Master',
+                    style: Theme.of(context).textTheme.headline1),
+              ),
+              body: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  headerWidget(context),
+                  Text(state.game().question),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: state.game().answers.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 20, bottom: 20),
+                          child: ListTile(
+                              title: Text(state.game().answers[index]),
+                              textColor: Colors.white,
+                              tileColor: state.setColor(index),
+                              onTap: () {
+                                state.timeCounter != 0
+                                    ? state.checkAnswer(
+                                        state.game().answers[index])
+                                    : null;
+                              }),
+                        );
+                      },
+                    ),
                   ),
-                  body: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      headerWidget(context),
-                      Text(state.game().question),
-                      ListView.builder(
-                        itemCount: state.game().answers.length,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(top: 20, bottom: 20),
-                            child: ListTile(
-                                title: Text(state.game().answers[index]),
-                                selectedColor: state.colors,
-                                tileColor: state.colors,
-                                onTap: () {
-                                  state.timeCounter != 0
-                                      ? state.checkAnswer(
-                                          state.game().answers[index])
-                                      : null;
-                                }),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
+                ],
+              ),
+            ),
     );
   }
 
@@ -80,20 +82,24 @@ class GameUI extends StatelessWidget {
   }
 
   Widget timerWidget(context) {
+    var state = Provider.of<QuizModel>(context, listen: false);
+
+    Text setText() {
+      if (state.timeCounter != 0) {
+        return Text('Time left: ${state.timeCounter}');
+      } else if (state.gameState == GameState.QuizDone) {
+        return Text('Your score: ${state.newGameCounter}');
+      } else {
+        return Text('Next Question: ${state.newGameCounter}');
+      }
+    }
+
     return Consumer<QuizModel>(
       builder: (context, state, child) => Container(
         child: Padding(
           padding: const EdgeInsets.all(5),
-          child: state.timeCounter != 0
-              ? Text(
-                  'Time left: ${state.timeCounter}',
-                )
-              : Text(
-                  'Next Question: ${state.newGameCounter}',
-                  style: TextStyle(
-                    fontSize: 15,
-                  ),
-                ),
+          child: setText(),
+          //style: TextStyle(fontSize: 15),
         ),
       ),
     );
@@ -129,28 +135,5 @@ class GameUI extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Color? cellColorForGameStateAndAnswer(GameState state, bool isCorrectAnswer) {
-    switch (state) {
-      case GameState.IsPlaying:
-        {
-          return Colors.grey;
-        }
-
-      case GameState.AnsweredCorrectly:
-        {
-          return Colors.green;
-        }
-
-      case GameState.AnsweredInCorrectly:
-        {
-          return Colors.red;
-        }
-      default:
-        {
-          GameState.None;
-        }
-    }
   }
 }

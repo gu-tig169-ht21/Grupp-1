@@ -45,7 +45,6 @@ class GameUI extends StatelessWidget {
                           padding: const EdgeInsets.only(top: 20, bottom: 20),
                           child: ListTile(
                               title: Text(state.game().answers[index]),
-                              textColor: Colors.white,
                               tileColor: state.setColor(index),
                               onTap: () {
                                 state.timeCounter != 0

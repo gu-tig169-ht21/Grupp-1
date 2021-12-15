@@ -14,7 +14,7 @@ class GameUI extends StatelessWidget {
     var state = Provider.of<QuizModel>(context, listen: false);
     bool selected = false;
     return Consumer<QuizModel>(
-      builder: (context, state, child) => state.counter ==
+      builder: (context, state, child) => state.currentQuestionIndex ==
               state.questionList.length
           ? GameScore()
           : Scaffold(

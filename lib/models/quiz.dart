@@ -48,7 +48,7 @@ class QuizModel extends ChangeNotifier {
   List<Question> questionList = [];
   int _points = 0;
 
-  int counter = 0;
+  int currentQuestionIndex = 0;
   Timer? nextQuestionTimer;
   Timer? questionTimer;
   var _timeCounter = 5;
@@ -75,7 +75,7 @@ class QuizModel extends ChangeNotifier {
   int get timeCounter => _timeCounter;
   int get newGameCounter => _newGameCounter;
 
-//Metod för att anropa service
+//Method to get Quiz
   Future<void> getQuiz() async {
     questionList = await QuizService.getQuiz();
     _setGameState(GameState.IsPlaying);
@@ -91,7 +91,7 @@ class QuizModel extends ChangeNotifier {
     }
 
 //Reset for new game
-    counter = 0;
+    currentQuestionIndex = 0;
     _points = 0;
     _setGameState(GameState.IsPlaying);
   }
@@ -101,7 +101,7 @@ class QuizModel extends ChangeNotifier {
 //Set Colors for Right and Wrong Ansers
   Color? setColor(int index) {
     if (_gameState == GameState.ShowColors) {
-      var question = questionList[counter];
+      var question = questionList[currentQuestionIndex];
 
       String currentIndex = question.answers[index];
 
@@ -117,7 +117,7 @@ class QuizModel extends ChangeNotifier {
 
   Question game() {
     //notifyListeners();
-    return questionList[counter];
+    return questionList[currentQuestionIndex];
   }
 
   void checkAnswer(String value) {
@@ -125,7 +125,7 @@ class QuizModel extends ChangeNotifier {
     questionTimer?.cancel();
     _nextQuestionCountDown();
 
-    if (value == questionList[counter].correct_answer) {
+    if (value == questionList[currentQuestionIndex].correct_answer) {
       _points += 1;
       _setGameState(GameState.ShowColors);
     } else {
@@ -136,9 +136,9 @@ class QuizModel extends ChangeNotifier {
   }
 
   void nextQuestion() {
-    counter++;
+    currentQuestionIndex++;
 
-    if (questionList.length == counter) {
+    if (questionList.length == currentQuestionIndex) {
       _setGameState(GameState.QuizDone);
       notifyListeners();
     } else {
@@ -156,7 +156,7 @@ class QuizModel extends ChangeNotifier {
         questionTimer?.cancel();
         _setGameState(GameState.ShowColors);
         _nextQuestionCountDown();
-      } else if (questionList.length == counter) {
+      } else if (questionList.length == currentQuestionIndex) {
         questionTimer?.cancel();
         _setGameState(GameState.QuizDone);
       } else {
@@ -177,7 +177,7 @@ class QuizModel extends ChangeNotifier {
         _newGameCounter = 5;
         _timeCounter = 5;
         _countDown();
-      } else if (questionList.length == counter) {
+      } else if (questionList.length == currentQuestionIndex) {
         nextQuestionTimer?.cancel();
         _setGameState(GameState.QuizDone);
       } else {

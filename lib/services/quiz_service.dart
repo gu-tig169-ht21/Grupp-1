@@ -8,12 +8,9 @@ var url =
 class QuizService {
 //Get a quiz question
   static Future<List<Question>> getQuiz() async {
-    print(url);
     var response = await http.get(
       Uri.parse(url),
     );
-    String bodyString = response.body;
-    var json = jsonDecode(bodyString);
 
     var quest = jsonDecode(response.body)['results'] as List;
     List<Question> questList =

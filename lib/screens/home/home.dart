@@ -20,26 +20,24 @@ class Home extends StatelessWidget {
     var state = Provider.of<QuizModel>(context, listen: false);
 
     return Scaffold(
-      appBar: AppBar(
-        title:
-            Text('Quiz Master', style: Theme.of(context).textTheme.headline1),
-        actions: [
-          TextButton.icon(
-              onPressed: () => _auth.signOut(),
-              icon: Icon(Icons.person, color: Colors.white),
-              label: Text('Log out', style: TextStyle(color: Colors.white))),
-          TextButton.icon(
-              onPressed: () {
-                Navigator.push(context,
+        appBar: AppBar(
+          title:
+              Text('Quiz Master', style: Theme.of(context).textTheme.headline1),
+          actions: [
+            TextButton.icon(
+                onPressed: () => _auth.signOut(),
+                icon: Icon(Icons.person, color: Colors.white),
+                label: Text('Log out', style: TextStyle(color: Colors.white))),
+            TextButton.icon(
+                onPressed: () {
+                  Navigator.push(context,
                       MaterialPageRoute(builder: (context) => Profile()));
-              },
-              icon: Icon(Icons.quiz, color: Colors.orange),
-              label: Text('Profile', style: TextStyle(color: Colors.orange))),
-        ],
-      ),
-      body: Consumer<QuizModel>(builder: (context, state, child) {
-        List<Question> quizList = state.getQuizList;
-        return Container(
+                },
+                icon: Icon(Icons.quiz, color: Colors.orange),
+                label: Text('Profile', style: TextStyle(color: Colors.orange))),
+          ],
+        ),
+        body: Container(
             child: Column(
           children: [
             TextButton(
@@ -48,15 +46,13 @@ class Home extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => NewGame()));
                 },
                 child: Text("New Game")),
-                 TextButton(
+            TextButton(
                 onPressed: () {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => Highscore()));
                 },
                 child: Text("HighScore")),
           ],
-        ));
-      }),
-    );
+        )));
   }
 }

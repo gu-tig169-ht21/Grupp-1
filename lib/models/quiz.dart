@@ -39,12 +39,6 @@ class Question {
         incorrect_answers:
             (json['incorrect_answers'] as List).map((map) => map).toList());
   }
-
-  @override
-  String toString() {
-    // TODO: implement toString
-    return "{${category} and ${question} +Fel  ${incorrect_answers[0]}, Fel ${incorrect_answers[1]}, Fel ${incorrect_answers[2]}, Rätt ${correct_answer}}";
-  }
 }
 
 enum GameState { None, IsPlaying, ShowColors, QuizDone }
@@ -57,8 +51,8 @@ class QuizModel extends ChangeNotifier {
   int counter = 0;
   Timer? nextQuestionTimer;
   Timer? questionTimer;
-  var _timeCounter = 10;
-  var _newGameCounter = 10;
+  var _timeCounter = 5;
+  var _newGameCounter = 5;
 
   GameState _gameState = GameState.None;
   GameState get gameState => _gameState;
@@ -81,11 +75,6 @@ class QuizModel extends ChangeNotifier {
   int get timeCounter => _timeCounter;
   int get newGameCounter => _newGameCounter;
 
-//Method to try choicePicker.
-  void playGame() {
-    print("{Categori: ${pickedCategory}, Difficulty: ${pickedDifficulty}}");
-  }
-
 //Metod för att anropa service
   Future<void> getQuiz() async {
     questionList = await QuizService.getQuiz();
@@ -99,10 +88,6 @@ class QuizModel extends ChangeNotifier {
         item.answers.add(item.incorrect_answers[i]);
       }
       item.answers.shuffle();
-    }
-
-    for (var item in questionList) {
-      print(item.answers.toString());
     }
 
 //Reset for new game
@@ -135,8 +120,6 @@ class QuizModel extends ChangeNotifier {
     return questionList[counter];
   }
 
-  String? pickedAnswer;
-
   void checkAnswer(String value) {
     _timeCounter = 0;
     questionTimer?.cancel();
@@ -144,15 +127,12 @@ class QuizModel extends ChangeNotifier {
 
     if (value == questionList[counter].correct_answer) {
       _points += 1;
-      pickedAnswer = value;
       _setGameState(GameState.ShowColors);
     } else {
       _setGameState(GameState.ShowColors);
     }
 
     notifyListeners();
-
-    //nextQuestion();
   }
 
   void nextQuestion() {
@@ -194,8 +174,8 @@ class QuizModel extends ChangeNotifier {
       if (_newGameCounter == 0) {
         nextQuestion();
         nextQuestionTimer?.cancel();
-        _newGameCounter = 10;
-        _timeCounter = 10;
+        _newGameCounter = 5;
+        _timeCounter = 5;
         _countDown();
       } else if (questionList.length == counter) {
         nextQuestionTimer?.cancel();

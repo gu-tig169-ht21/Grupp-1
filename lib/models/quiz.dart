@@ -41,7 +41,7 @@ class Question {
   }
 }
 
-enum GameState { None, IsPlaying, ShowColors, QuizDone }
+enum GameState { ready, init, showQuestion, ShowColors, QuizDone }
 
 class QuizModel extends ChangeNotifier {
   //List of Question objects
@@ -51,13 +51,13 @@ class QuizModel extends ChangeNotifier {
   int currentQuestionIndex = 0;
   Timer? nextQuestionTimer;
   Timer? questionTimer;
-  var _timeCounter = 5;
-  var _newGameCounter = 5;
+  late int _timeCounter;
+  late int _nextQuestionCounter;
 
-  GameState _gameState = GameState.None;
+  GameState _gameState = GameState.ready;
   GameState get gameState => _gameState;
 
-  void _setGameState(GameState state) {
+  void setGameState(GameState state) {
     _gameState = state;
     notifyListeners();
   }
@@ -73,13 +73,12 @@ class QuizModel extends ChangeNotifier {
 
   int get points => _points;
   int get timeCounter => _timeCounter;
-  int get newGameCounter => _newGameCounter;
+  int get nextQuestionCounter => _nextQuestionCounter;
+  int get getcurrentQuestionIndex => currentQuestionIndex;
 
 //Method to get Quiz
   Future<void> getQuiz() async {
     questionList = await QuizService.getQuiz();
-    _setGameState(GameState.IsPlaying);
-    _countDown();
 
     for (var item in questionList) {
       item.answers.add(item.correct_answer);
@@ -90,10 +89,11 @@ class QuizModel extends ChangeNotifier {
       item.answers.shuffle();
     }
 
-//Reset for new game
+    //Reset for new game
     currentQuestionIndex = 0;
     _points = 0;
-    _setGameState(GameState.IsPlaying);
+
+    initCountDown();
   }
 
 //////////////////////////GAME LOGIC//////////////////////
@@ -115,8 +115,7 @@ class QuizModel extends ChangeNotifier {
     }
   }
 
-  Question game() {
-    //notifyListeners();
+  Question getQuestion() {
     return questionList[currentQuestionIndex];
   }
 
@@ -127,10 +126,8 @@ class QuizModel extends ChangeNotifier {
 
     if (value == questionList[currentQuestionIndex].correct_answer) {
       _points += 1;
-      _setGameState(GameState.ShowColors);
-    } else {
-      _setGameState(GameState.ShowColors);
     }
+    setGameState(GameState.ShowColors);
 
     notifyListeners();
   }
@@ -138,27 +135,38 @@ class QuizModel extends ChangeNotifier {
   void nextQuestion() {
     currentQuestionIndex++;
 
-    if (questionList.length == currentQuestionIndex) {
-      _setGameState(GameState.QuizDone);
-      notifyListeners();
-    } else {
-      _setGameState(GameState.IsPlaying);
-      notifyListeners();
-    }
+    setGameState(GameState.showQuestion);
+    notifyListeners();
+  }
+
+//Init countDown for user to Get ready
+  void initCountDown() {
+    int countDown = 3;
+    const oneSec = const Duration(seconds: 1);
+    Timer timer = Timer.periodic(oneSec, (timer) {
+      if (countDown == 0) {
+        timer.cancel();
+        setGameState(GameState.showQuestion);
+        _countDown(); // Activates counter for questions
+      } else {
+        countDown--;
+      }
+    });
   }
 
   void _countDown() {
+    _timeCounter = 10;
     questionTimer = Timer.periodic(
-        Duration(
+        const Duration(
           seconds: 1,
         ), (Timer timer) {
       if (_timeCounter == 0) {
         questionTimer?.cancel();
-        _setGameState(GameState.ShowColors);
+        setGameState(GameState.ShowColors);
         _nextQuestionCountDown();
       } else if (questionList.length == currentQuestionIndex) {
         questionTimer?.cancel();
-        _setGameState(GameState.QuizDone);
+        setGameState(GameState.ready);
       } else {
         _timeCounter--;
       }
@@ -167,21 +175,23 @@ class QuizModel extends ChangeNotifier {
   }
 
   void _nextQuestionCountDown() {
+    _nextQuestionCounter = 5;
     nextQuestionTimer = Timer.periodic(
         Duration(
           seconds: 1,
         ), (timer) {
-      if (_newGameCounter == 0) {
+      if (_nextQuestionCounter == 0 &&
+          (currentQuestionIndex - 1) < questionList.length) {
         nextQuestion();
         nextQuestionTimer?.cancel();
-        _newGameCounter = 5;
+        _nextQuestionCounter = 5;
         _timeCounter = 5;
         _countDown();
       } else if (questionList.length == currentQuestionIndex) {
         nextQuestionTimer?.cancel();
-        _setGameState(GameState.QuizDone);
+        setGameState(GameState.ready);
       } else {
-        _newGameCounter--;
+        _nextQuestionCounter--;
       }
       notifyListeners();
     });

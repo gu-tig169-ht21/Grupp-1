@@ -15,6 +15,7 @@ class GameUI extends StatelessWidget {
           ? const GameScore()
           : Scaffold(
               appBar: AppBar(
+                automaticallyImplyLeading: false,
                 centerTitle: true,
                 title: Text('Quiz Master',
                     style: Theme.of(context).textTheme.headline1),
@@ -104,7 +105,8 @@ class GameUI extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(5),
           child: Text(
-            "Question: ${state.getcurrentQuestionIndex + 1} of ${state.getQuizList.length}",
+            // "Question: ${state.getcurrentQuestionIndex + 1} of ${state.getQuizList.length}",
+            state.getQuestion().category,
             style: TextStyle(
               fontSize: 15,
             ),

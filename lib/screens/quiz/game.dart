@@ -1,13 +1,9 @@
 
-
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:html_character_entities/html_character_entities.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/models/quiz.dart';
 import 'package:quizapp/screens/quiz/game_score.dart';
-import 'package:characters/characters.dart' as char;
 
 class GameUI extends StatelessWidget {
   GameUI({Key? key}) : super(key: key);

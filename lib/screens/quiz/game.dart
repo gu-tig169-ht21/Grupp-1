@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/models/quiz.dart';
-import 'package:quizapp/screens/home/highscore.dart';
-import 'package:quizapp/screens/home/home.dart';
 import 'package:quizapp/screens/quiz/game_score.dart';
 
 class GameUI extends StatelessWidget {
@@ -11,53 +9,48 @@ class GameUI extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var state = Provider.of<QuizModel>(context, listen: false);
-    bool selected = false;
     return Consumer<QuizModel>(
-      builder: (context, state, child) => state.counter ==
+      builder: (context, state, child) => state.currentQuestionIndex ==
               state.questionList.length
-          ? GameScore()
+          ? const GameScore()
           : Scaffold(
               appBar: AppBar(
                 centerTitle: true,
-                actions: [
-                  TextButton(
-                    onPressed: () async {
-                      await state.getQuiz();
-                    },
-                    child: Text('Press me!'),
-                  )
-                ],
                 title: Text('Quiz Master',
                     style: Theme.of(context).textTheme.headline1),
               ),
-              body: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  headerWidget(context),
-                  Text(state.game().question),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: state.game().answers.length,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(top: 20, bottom: 20),
-                          child: ListTile(
-                              title: Text(state.game().answers[index]),
-                              tileColor: state.setColor(index),
-                              onTap: () {
-                                state.timeCounter != 0
-                                    ? state.checkAnswer(
-                                        state.game().answers[index])
-                                    : null;
-                              }),
-                        );
-                      },
+              body: state.gameState == GameState.init
+                  ? Text("Get Ready")
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        headerWidget(context),
+                        Text(state.getQuestion().question),
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: state.getQuestion().answers.length,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 20, bottom: 20),
+                                child: ListTile(
+                                    title: Text(
+                                        state.getQuestion().answers[index]),
+                                    tileColor: state.setColor(index),
+                                    onTap: () {
+                                      state.timeCounter != 0
+                                          ? state.checkAnswer(state
+                                              .getQuestion()
+                                              .answers[index])
+                                          : null;
+                                    }),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
             ),
     );
   }
@@ -73,7 +66,7 @@ class GameUI extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           timerWidget(context),
-          categoryWidget(context),
+          questionWidget(context),
           scoreWidget(context),
         ],
       ),
@@ -86,10 +79,11 @@ class GameUI extends StatelessWidget {
     Text setText() {
       if (state.timeCounter != 0) {
         return Text('Time left: ${state.timeCounter}');
-      } else if (state.gameState == GameState.QuizDone) {
-        return Text('Your score: ${state.newGameCounter}');
+      } else if (state.getcurrentQuestionIndex + 1 ==
+          state.getQuizList.length) {
+        return Text('Loading Score: ${state.nextQuestionCounter}');
       } else {
-        return Text('Next Question: ${state.newGameCounter}');
+        return Text('Next Question: ${state.nextQuestionCounter}');
       }
     }
 
@@ -104,13 +98,13 @@ class GameUI extends StatelessWidget {
     );
   }
 
-  Widget categoryWidget(context) {
+  Widget questionWidget(context) {
     return Consumer<QuizModel>(
       builder: (context, state, child) => Container(
         child: Padding(
           padding: const EdgeInsets.all(5),
           child: Text(
-            state.pickedCategory,
+            "Question: ${state.getcurrentQuestionIndex + 1} of ${state.getQuizList.length}",
             style: TextStyle(
               fontSize: 15,
             ),
@@ -127,7 +121,7 @@ class GameUI extends StatelessWidget {
           padding: const EdgeInsets.all(10),
           child: Text(
             'Points: ${state.points}',
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 15,
             ),
           ),

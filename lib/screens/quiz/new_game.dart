@@ -43,7 +43,9 @@ class NewGame extends StatelessWidget {
               ),
               TextButton(
                   onPressed: () async {
+                    //Initialize Quiz
                     await state.getQuiz();
+                    state.setGameState(GameState.init);
                     Navigator.pushReplacement(context,
                         MaterialPageRoute(builder: (context) => GameUI()));
                   },

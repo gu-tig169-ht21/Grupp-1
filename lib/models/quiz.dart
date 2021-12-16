@@ -63,10 +63,10 @@ class QuizModel extends ChangeNotifier {
   }
 
   //Data from user for type of quiz to API
-  String pickedCategory = 'Slumpa';
-  var categoryList = ['Slumpa', 'Sports', 'Animals'];
-  String? pickedDifficulty = 'Easy';
-  var difficultyList = ['Easy', 'Medium', 'Hard'];
+  String pickedCategory = 'Random';
+  var categoryList = ['Random', 'Sports', 'Animals', 'Movie', 'Music', 'Video Games', 'Geography', 'Computers'];
+  String? pickedDifficulty = 'easy';
+  var difficultyList = ['easy', 'medium', 'hard'];
 
   //Getter for list
   List<Question> get getQuizList => questionList;
@@ -78,7 +78,7 @@ class QuizModel extends ChangeNotifier {
 
 //Method to get Quiz
   Future<void> getQuiz() async {
-    questionList = await QuizService.getQuiz();
+    questionList = await QuizService.getQuiz(27,pickedDifficulty!);
 
     for (var item in questionList) {
       item.answers.add(item.correct_answer);
@@ -180,8 +180,7 @@ class QuizModel extends ChangeNotifier {
         Duration(
           seconds: 1,
         ), (timer) {
-      if (_nextQuestionCounter == 0 &&
-          (currentQuestionIndex - 1) < questionList.length) {
+      if (_nextQuestionCounter == 0) {
         nextQuestion();
         nextQuestionTimer?.cancel();
         _nextQuestionCounter = 5;

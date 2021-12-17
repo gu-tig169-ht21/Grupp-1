@@ -1,4 +1,6 @@
+
 import 'package:flutter/material.dart';
+import 'package:html_character_entities/html_character_entities.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/models/quiz.dart';
 import 'package:quizapp/screens/quiz/game_score.dart';
@@ -15,6 +17,7 @@ class GameUI extends StatelessWidget {
           ? const GameScore()
           : Scaffold(
               appBar: AppBar(
+                automaticallyImplyLeading: false,
                 centerTitle: true,
                 title: Text('Quiz Master',
                     style: Theme.of(context).textTheme.headline1),
@@ -25,7 +28,7 @@ class GameUI extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         headerWidget(context),
-                        Text(state.getQuestion().question),
+                        Text(HtmlCharacterEntities.decode(state.getQuestion().question)),
                         Expanded(
                           child: ListView.builder(
                             itemCount: state.getQuestion().answers.length,
@@ -35,8 +38,8 @@ class GameUI extends StatelessWidget {
                                 padding:
                                     const EdgeInsets.only(top: 20, bottom: 20),
                                 child: ListTile(
-                                    title: Text(
-                                        state.getQuestion().answers[index]),
+                                    title: Text(HtmlCharacterEntities.decode(state.getQuestion().answers[index])
+                                        ),
                                     tileColor: state.setColor(index),
                                     onTap: () {
                                       state.timeCounter != 0
@@ -104,7 +107,8 @@ class GameUI extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(5),
           child: Text(
-            "Question: ${state.getcurrentQuestionIndex + 1} of ${state.getQuizList.length}",
+            // "Question: ${state.getcurrentQuestionIndex + 1} of ${state.getQuizList.length}",
+            state.getQuestion().category,
             style: TextStyle(
               fontSize: 15,
             ),

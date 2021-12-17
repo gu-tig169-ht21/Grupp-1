@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/models/user.dart';
+import 'package:quizapp/services/auth_service.dart';
 import 'package:quizapp/services/quiz_service.dart';
 import 'dart:async';
 
@@ -63,10 +64,19 @@ class QuizModel extends ChangeNotifier {
   }
 
   //Data from user for type of quiz to API
-  String pickedCategory = 'Slumpa';
-  var categoryList = ['Slumpa', 'Sports', 'Animals'];
-  String? pickedDifficulty = 'Easy';
-  var difficultyList = ['Easy', 'Medium', 'Hard'];
+  String pickedCategory = 'Random';
+  var categoryList = [
+    'Random',
+    'Sports',
+    'Animals',
+    'Movie',
+    'Music',
+    'Video Games',
+    'Geography',
+    'Computers'
+  ];
+  String? pickedDifficulty = 'easy';
+  var difficultyList = ['easy', 'medium', 'hard'];
 
   //Getter for list
   List<Question> get getQuizList => questionList;
@@ -78,7 +88,60 @@ class QuizModel extends ChangeNotifier {
 
 //Method to get Quiz
   Future<void> getQuiz() async {
-    questionList = await QuizService.getQuiz();
+    int categoryId = 0;
+
+    switch (pickedCategory) {
+      case "Random":
+        {
+          categoryId = 0;
+        }
+        break;
+
+      case "Sports":
+        {
+          categoryId = 21;
+        }
+        break;
+
+      case "Animals":
+        {
+          categoryId = 27;
+        }
+        break;
+
+      case "Movie":
+        {
+          categoryId = 11;
+        }
+        break;
+
+      case "Music":
+        {
+          categoryId = 12;
+        }
+        break;
+
+      case "Video Games":
+        {
+          categoryId = 15;
+        }
+        break;
+
+      case "Geography":
+        {
+          categoryId = 22;
+        }
+        break;
+
+      case "Computers":
+        {
+          categoryId = 18;
+        }
+        break;
+      default:
+    }
+
+    questionList = await QuizService.getQuiz(categoryId, pickedDifficulty!);
 
     for (var item in questionList) {
       item.answers.add(item.correct_answer);
@@ -86,7 +149,7 @@ class QuizModel extends ChangeNotifier {
       for (var i = 0; i < item.incorrect_answers.length; i++) {
         item.answers.add(item.incorrect_answers[i]);
       }
-      item.answers.shuffle();
+      //item.answers.shuffle();
     }
 
     //Reset for new game
@@ -120,13 +183,22 @@ class QuizModel extends ChangeNotifier {
   }
 
   void checkAnswer(String value) {
+    if (value == questionList[currentQuestionIndex].correct_answer) {
+      int timePoints = _timeCounter;
+
+      if (pickedDifficulty == 'hard') {
+        _points = _points + (timePoints * 3);
+      } else if (pickedDifficulty == 'medium') {
+        _points = _points + (timePoints * 2);
+      } else {
+        _points = _points + timePoints;
+      }
+    }
+
     _timeCounter = 0;
     questionTimer?.cancel();
     _nextQuestionCountDown();
 
-    if (value == questionList[currentQuestionIndex].correct_answer) {
-      _points += 1;
-    }
     setGameState(GameState.ShowColors);
 
     notifyListeners();
@@ -155,7 +227,7 @@ class QuizModel extends ChangeNotifier {
   }
 
   void _countDown() {
-    _timeCounter = 10;
+    _timeCounter = 30;
     questionTimer = Timer.periodic(
         const Duration(
           seconds: 1,
@@ -180,8 +252,7 @@ class QuizModel extends ChangeNotifier {
         Duration(
           seconds: 1,
         ), (timer) {
-      if (_nextQuestionCounter == 0 &&
-          (currentQuestionIndex - 1) < questionList.length) {
+      if (_nextQuestionCounter == 0) {
         nextQuestion();
         nextQuestionTimer?.cancel();
         _nextQuestionCounter = 5;

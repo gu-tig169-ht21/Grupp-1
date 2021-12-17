@@ -5,9 +5,15 @@ import 'package:quizapp/services/user_service.dart';
 
 //Model for Authenticated user
 class AuthUser {
-  final String uid;
+  String uid;
 
   AuthUser({required this.uid});
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    return uid;
+  }
 }
 
 class UserData {

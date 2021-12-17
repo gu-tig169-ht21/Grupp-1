@@ -26,25 +26,30 @@ class UserService {
 
   //Get all users HighScore
   Stream<QuerySnapshot> getUserHighScore() {
-    return databaseReference.collection("users").orderBy('HighScore', descending: true).snapshots();
+    return databaseReference
+        .collection("users")
+        .orderBy('HighScore', descending: true)
+        .snapshots();
   }
 
+  Future getUserData() async {
+    var snapshot = await databaseReference.collection("users").doc(uid).get();
+    return snapshot.data();
+  }
 
   //Update userData (DisplayName)
-  Future<void> updateUserName(String displayName)  {
+  Future<void> updateUserName(String displayName) {
     return databaseReference
         .collection("users")
         .doc(uid)
         .update({"UserName": displayName});
   }
 
-   //Update userData (HighScore)
-  Future<void> updateHighScore(int score)  {
+  //Update userData (HighScore)
+  Future<void> updateHighScore(int score) {
     return databaseReference
         .collection("users")
         .doc(uid)
-        .update({"HighScore": FieldValue.increment(score)});
+        .update({"HighScore": score});
   }
-
-
 }

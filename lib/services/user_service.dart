@@ -32,6 +32,11 @@ class UserService {
         .snapshots();
   }
 
+  Future getUserData() async {
+    var snapshot = await databaseReference.collection("users").doc(uid).get();
+    return snapshot.data();
+  }
+
   //Update userData (DisplayName)
   Future<void> updateUserName(String displayName) {
     return databaseReference
@@ -45,6 +50,6 @@ class UserService {
     return databaseReference
         .collection("users")
         .doc(uid)
-        .update({"HighScore": FieldValue.increment(score)});
+        .update({"HighScore": score});
   }
 }

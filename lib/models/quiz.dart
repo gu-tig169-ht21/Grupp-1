@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/models/user.dart';
+import 'package:quizapp/services/auth_service.dart';
 import 'package:quizapp/services/quiz_service.dart';
 import 'dart:async';
 

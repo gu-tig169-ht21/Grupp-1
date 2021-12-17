@@ -5,7 +5,8 @@ import 'package:quizapp/models/quiz.dart';
 class QuizService {
 //Get a quiz question
   static Future<List<Question>> getQuiz(int category, String difficulty) async {
-    var url = 'https://opentdb.com/api.php?amount=10&category=$category&difficulty=$difficulty';
+    var url =
+        'https://opentdb.com/api.php?amount=2&category=$category&difficulty=$difficulty';
     var response = await http.get(Uri.parse(url),
         headers: {'Content-type': 'application/json charset=utf-8'});
 

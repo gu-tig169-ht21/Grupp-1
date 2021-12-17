@@ -1,3 +1,5 @@
+///SPO
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,28 +31,37 @@ class NewGame extends StatelessWidget {
           title: Text("New Game"),
           centerTitle: true,
         ),
-        body: Container(
-          child: Column(
-            children: [
-              QuizTypePicker(
-                  pickedValue: state.pickedCategory,
-                  valueList: state.categoryList,
-                  setValue: setCategory),
-              QuizTypePicker(
-                pickedValue: state.pickedDifficulty,
-                valueList: state.difficultyList,
-                setValue: setDifficulty,
-              ),
-              TextButton(
-                  onPressed: () async {
-                    //Initialize Quiz
-                    await state.getQuiz();
-                    state.setGameState(GameState.init);
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) => GameUI()));
-                  },
-                  child: const Text('Spela')),
-            ],
+        body: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Align(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                QuizTypePicker(
+                    pickedValue: state.pickedCategory,
+                    valueList: state.categoryList,
+                    setValue: setCategory),
+                QuizTypePicker(
+                  pickedValue: state.pickedDifficulty,
+                  valueList: state.difficultyList,
+                  setValue: setDifficulty,
+                ),
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        minimumSize: const Size.fromHeight(40)),
+                    onPressed: () async {
+                      //Initialize Quiz
+                      await state.getQuiz();
+                      state.setGameState(GameState.init);
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) => GameUI()));
+                    },
+                    child: const Text(
+                      'Start Game',
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    )),
+              ],
+            ),
           ),
         ));
   }
@@ -74,20 +85,40 @@ class QuizTypePicker extends StatefulWidget {
 class _QuizTypePickerState extends State<QuizTypePicker> {
   @override
   Widget build(BuildContext context) {
-    return DropdownButton(
-      value: widget.pickedValue,
-      onChanged: (String? newValue) {
-        setState(() {
-          widget.pickedValue = newValue;
-          widget.setValue(newValue);
-        });
-      },
-      items: widget.valueList.map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(
+            width: 2,
+            color: Colors.black,
+          ),
+        ),
+        child: DropdownButton(
+          dropdownColor: Colors.white,
+          menuMaxHeight: 150,
+          isExpanded: true,
+          value: widget.pickedValue,
+          onChanged: (String? newValue) {
+            setState(() {
+              widget.pickedValue = newValue;
+              widget.setValue(newValue);
+            });
+          },
+          items: widget.valueList.map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Align(
+                child: Text(
+                  value,
+                  style: const TextStyle(color: Colors.black, fontSize: 20),
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+      ),
     );
   }
 }

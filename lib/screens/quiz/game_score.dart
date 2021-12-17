@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/models/quiz.dart';
+import 'package:quizapp/models/user.dart';
 import 'package:confetti/confetti.dart';
 import 'package:quizapp/models/user.dart';
 import 'package:quizapp/services/user_service.dart';
@@ -59,22 +60,19 @@ class _GameScoreState extends State<GameScore> {
     var quizState = Provider.of<QuizModel>(context, listen: false);
     String id = stateUser.uid;
 
-    saveScore(id, quizState.points);
-
     return Scaffold(
-        appBar: AppBar(title: Text("Game Score")),
         body: FutureBuilder(
-          future: saveScore(id, quizState.points),
-          builder: (context, newHigh) {
-            if (newHigh.data == true) {
-              return confetti();
-            } else if (newHighScore == null) {
-              return Text("Loading");
-            } else {
-              return Text("Ingen ny High");
-            }
-          },
-        ));
+      future: saveScore(id, quizState.points),
+      builder: (context, newHigh) {
+        if (newHigh.data == true) {
+          return confetti();
+        } else if (newHighScore == null) {
+          return Text("Loading");
+        } else {
+          return Text("Ingen ny High");
+        }
+      },
+    ));
   }
 
   Widget confetti() {

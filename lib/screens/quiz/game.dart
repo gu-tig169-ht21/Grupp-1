@@ -1,9 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:html_character_entities/html_character_entities.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/models/quiz.dart';
 import 'package:quizapp/screens/quiz/game_score.dart';
+import 'package:quizapp/screens/quiz/init_game.dart';
 
 class GameUI extends StatelessWidget {
   GameUI({Key? key}) : super(key: key);
@@ -23,12 +23,13 @@ class GameUI extends StatelessWidget {
                     style: Theme.of(context).textTheme.headline1),
               ),
               body: state.gameState == GameState.init
-                  ? Text("Get Ready")
+                  ? InitGame()
                   : Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         headerWidget(context),
-                        Text(HtmlCharacterEntities.decode(state.getQuestion().question)),
+                        Text(HtmlCharacterEntities.decode(
+                            state.getQuestion().question)),
                         Expanded(
                           child: ListView.builder(
                             itemCount: state.getQuestion().answers.length,
@@ -38,8 +39,8 @@ class GameUI extends StatelessWidget {
                                 padding:
                                     const EdgeInsets.only(top: 20, bottom: 20),
                                 child: ListTile(
-                                    title: Text(HtmlCharacterEntities.decode(state.getQuestion().answers[index])
-                                        ),
+                                    title: Text(HtmlCharacterEntities.decode(
+                                        state.getQuestion().answers[index])),
                                     tileColor: state.setColor(index),
                                     onTap: () {
                                       state.timeCounter != 0

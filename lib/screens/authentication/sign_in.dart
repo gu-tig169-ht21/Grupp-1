@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:quizapp/models/user.dart';
 import 'package:quizapp/screens/authentication/register.dart';
+import 'package:quizapp/screens/authentication/reset_password.dart';
 import 'package:quizapp/services/auth_service.dart';
-import 'package:provider/provider.dart';
 
 class SignIn extends StatefulWidget {
   SignIn({Key? key}) : super(key: key);
@@ -23,20 +23,23 @@ class _SignInState extends State<SignIn> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text("Logga in"),
+        title: const Text("Quiz Master"),
         centerTitle: true,
         elevation: 0,
       ),
       body: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 50),
+        margin: EdgeInsets.all(20),
         child: Form(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               TextFormField(
                 onChanged: (value) {
                   email = value;
                 },
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15.0)),
                     icon: Icon(Icons.email, color: Colors.amber),
                     labelText: "Email",
                     fillColor: Colors.black,
@@ -47,13 +50,24 @@ class _SignInState extends State<SignIn> {
                 onChanged: (value) {
                   password = value;
                 },
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15.0)),
                   icon: Icon(Icons.lock, color: Colors.amber),
-                  labelText: "Lösenord",
+                  labelText: "Password",
                   fillColor: Colors.black,
                   filled: true,
                 ),
               ),
+              TextButton(
+                  onPressed: () async {
+                    var result = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ResetPassword()));
+                    print(email);
+                  },
+                  child: Text("Forgot password?")),
               Container(
                 width: double.infinity,
                 margin: const EdgeInsets.only(top: 20),
@@ -62,7 +76,7 @@ class _SignInState extends State<SignIn> {
                     _state.signIn(email, password);
                   },
                   child: const Text(
-                    'Logga in',
+                    'Sign In',
                     style: TextStyle(color: Colors.white, fontSize: 20),
                   ),
                   style: ButtonStyle(
@@ -79,7 +93,7 @@ class _SignInState extends State<SignIn> {
                         MaterialPageRoute(builder: (context) => Register()));
                   },
                   child: const Text(
-                    'Registrera',
+                    'Register',
                     style: TextStyle(color: Colors.white, fontSize: 20),
                   ),
                   style: ButtonStyle(

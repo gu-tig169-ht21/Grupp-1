@@ -52,4 +52,8 @@ class AuthService {
     await _auth.signOut();
     print("User signedOut");
   }
+
+  void sendResetPasswordLink(email) {
+    _auth.sendPasswordResetEmail(email: email);
+  }
 }

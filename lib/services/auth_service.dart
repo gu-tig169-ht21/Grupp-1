@@ -25,27 +25,37 @@ class AuthService {
   //Logga in
 
   Future signIn(email, password) async {
-    UserCredential result = await _auth.signInWithEmailAndPassword(
-        email: email, password: password);
-    User? user = result.user;
+    try {
+      UserCredential result = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      return result.user;
+    } catch (e) {
+      return null;
+    }
   }
 
   // Create a CollectionReference called users that references the firestore collection
 
   //Registrera mail + lösen
   Future registerWithWEmail(UserData customUser) async {
-    UserCredential result = await _auth.createUserWithEmailAndPassword(
-        email: customUser.email, password: customUser.password);
+    try {
+      UserCredential result = await _auth.createUserWithEmailAndPassword(
+          email: customUser.email, password: customUser.password);
 
-    User? user = result.user;
-    customUser.id = user!.uid;
+      User? user = result.user;
+      customUser.id = user!.uid;
 
-    await databaseReference.collection("users").doc(customUser.id).set({
-      "id": customUser.id,
-      "email": customUser.email,
-      "UserName": customUser.displayName,
-      "HighScore": customUser.score
-    });
+      await databaseReference.collection("users").doc(customUser.id).set({
+        "id": customUser.id,
+        "email": customUser.email,
+        "UserName": customUser.displayName,
+        "HighScore": customUser.score
+      });
+
+      return user;
+    } catch (e) {
+      return null;
+    }
   }
 
   Future<void> signOut() async {

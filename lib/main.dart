@@ -34,6 +34,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         home: Wrapper(),
         theme: ThemeData(
           // Theme settings

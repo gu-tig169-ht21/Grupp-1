@@ -27,7 +27,7 @@ class Profile extends StatelessWidget {
             builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
               // Felhantering om inga data kommer
               if (!snapshot.hasData) {
-                return const FloatingLoadingText();
+                return const Loading();
               }
 
               final data = snapshot.requireData;

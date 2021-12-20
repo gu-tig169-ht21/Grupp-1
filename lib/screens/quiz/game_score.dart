@@ -7,6 +7,7 @@ import 'package:quizapp/models/user.dart';
 import 'package:confetti/confetti.dart';
 import 'package:quizapp/models/user.dart';
 import 'package:quizapp/screens/home/highscore.dart';
+import 'package:quizapp/screens/shared/loading.dart';
 import 'package:quizapp/services/user_service.dart';
 import '';
 
@@ -40,12 +41,14 @@ class _GameScoreState extends State<GameScore> {
   }
 
   bool? newHighScore = null;
-  late int currentHigh;
+  int currentHigh = 0;
 
   Future<bool?> saveScore(String id, int points) async {
     // int currentHighScore = await getCurrentHighScore(id);
-    currentHigh = await getCurrentHighScore(id);
-    print(currentHigh);
+    if (newHighScore == null) {
+      currentHigh = await getCurrentHighScore(id);
+    }
+
     //Save HighScore only if Score is bigger than current
     if (points > currentHigh) {
       UserService(uid: id).updateHighScore(points);
@@ -68,18 +71,18 @@ class _GameScoreState extends State<GameScore> {
       builder: (context, state, child) => Scaffold(
         appBar: AppBar(
           title:
-              Text('Gamescore', style: Theme.of(context).textTheme.headline1),
+              Text('Game score', style: Theme.of(context).textTheme.headline1),
+          centerTitle: true,
         ),
         body: FutureBuilder(
           future: saveScore(id, quizState.points),
           builder: (context, newHigh) {
             if (newHigh.data == true) {
               return newHighscoreView(quizState.points, currentHigh);
-            } else if (newHighScore == null) {
-              return Text("Loading");
+            } else if (newHigh.data == null) {
+              return Loading();
             } else {
               return noNewHighscoreView(quizState.points, currentHigh);
-              //return newHighscoreView(quizState.points, currentHigh);
             }
           },
         ),
@@ -111,8 +114,9 @@ class _GameScoreState extends State<GameScore> {
           AnimatedTextKit(
             animatedTexts: [
               ColorizeAnimatedText('NEW HIGHSCORE!',
-              speed: const Duration(seconds: 1),
-                  textStyle: colorizeTextStyle, colors: colorizeColors)
+                  speed: const Duration(seconds: 1),
+                  textStyle: colorizeTextStyle,
+                  colors: colorizeColors)
             ],
             totalRepeatCount: 5,
           ),
@@ -194,5 +198,5 @@ class _GameScoreState extends State<GameScore> {
         Colors.purple
       ],
     );
-  } // manually specify t
+  }
 }

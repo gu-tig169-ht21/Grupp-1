@@ -28,48 +28,59 @@ class NewGame extends StatelessWidget {
     }
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text("New Game"),
-          centerTitle: true,
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Align(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Logo(),
-                QuizTypePicker(
-                    pickedValue: state.pickedCategory,
-                    valueList: state.categoryList,
-                    setValue: setCategory),
-                QuizTypePicker(
-                  pickedValue: state.pickedDifficulty,
-                  valueList: state.difficultyList,
-                  setValue: setDifficulty,
-                ),
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        minimumSize: const Size.fromHeight(40), 
-                        shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(20.0),
-                    ),),
-                        
-                    onPressed: () async {
-                      //Initialize Quiz
-                      await state.getQuiz();
-                      state.setGameState(GameState.init);
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (context) => GameUI()));
-                    },
-                    child: const Text(
-                      'Start Game',
-                      style: TextStyle(color: Colors.white, fontSize: 20),
-                    )),
-              ],
+      appBar: AppBar(
+        title: Text("New Game"),
+        centerTitle: true,
+      ),
+      body: Container(
+        margin: EdgeInsets.fromLTRB(20, 50, 20, 0),
+        child: Column(
+          children: [
+            Logo(),
+            const SizedBox(height: 50),
+            Container(
+                alignment: Alignment.topLeft,
+                child: const Text(
+                  "Category",
+                  style: TextStyle(fontSize: 20),
+                )),
+            QuizTypePicker(
+                pickedValue: state.pickedCategory,
+                valueList: state.categoryList,
+                setValue: setCategory),
+            const SizedBox(height: 10),
+            Container(
+                alignment: Alignment.topLeft,
+                child:
+                    const Text("Difficulty", style: TextStyle(fontSize: 20))),
+            QuizTypePicker(
+              pickedValue: state.pickedDifficulty,
+              valueList: state.difficultyList,
+              setValue: setDifficulty,
             ),
-          ),
-        ));
+            const SizedBox(height: 70),
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size.fromHeight(40),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                ),
+                onPressed: () async {
+                  //Initialize Quiz
+                  await state.getQuiz();
+                  state.setGameState(GameState.init);
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => GameUI()));
+                },
+                child: const Text(
+                  'Start Game',
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                )),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -91,40 +102,37 @@ class QuizTypePicker extends StatefulWidget {
 class _QuizTypePickerState extends State<QuizTypePicker> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(
-            width: 2,
-            color: Colors.black,
-          ),
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(
+          width: 2,
+          color: Colors.black,
         ),
-        child: DropdownButton(
-          dropdownColor: Colors.white,
-          icon: Icon(Icons.keyboard_arrow_down, color: Colors.black),
-          menuMaxHeight: 150,
-          isExpanded: true,
-          value: widget.pickedValue,
-          onChanged: (String? newValue) {
-            setState(() {
-              widget.pickedValue = newValue;
-              widget.setValue(newValue);
-            });
-          },
-          items: widget.valueList.map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Align(
-                child: Text(
-                  value,
-                  style: const TextStyle(color: Colors.black, fontSize: 20),
-                ),
+      ),
+      child: DropdownButton(
+        dropdownColor: Colors.white,
+        icon: Icon(Icons.keyboard_arrow_down, color: Colors.black),
+        menuMaxHeight: 150,
+        isExpanded: true,
+        value: widget.pickedValue,
+        onChanged: (String? newValue) {
+          setState(() {
+            widget.pickedValue = newValue;
+            widget.setValue(newValue);
+          });
+        },
+        items: widget.valueList.map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Align(
+              child: Text(
+                value,
+                style: const TextStyle(color: Colors.black, fontSize: 20),
               ),
-            );
-          }).toList(),
-        ),
+            ),
+          );
+        }).toList(),
       ),
     );
   }

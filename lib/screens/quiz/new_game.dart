@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/models/quiz.dart';
 import 'package:quizapp/screens/quiz/game.dart';
+import 'package:quizapp/screens/shared/logo.dart';
 
 class NewGame extends StatelessWidget {
   const NewGame({Key? key}) : super(key: key);
@@ -37,6 +38,7 @@ class NewGame extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Logo(),
                 QuizTypePicker(
                     pickedValue: state.pickedCategory,
                     valueList: state.categoryList,
@@ -48,7 +50,11 @@ class NewGame extends StatelessWidget {
                 ),
                 ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        minimumSize: const Size.fromHeight(40)),
+                        minimumSize: const Size.fromHeight(40), 
+                        shape: new RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(20.0),
+                    ),),
+                        
                     onPressed: () async {
                       //Initialize Quiz
                       await state.getQuiz();
@@ -97,6 +103,7 @@ class _QuizTypePickerState extends State<QuizTypePicker> {
         ),
         child: DropdownButton(
           dropdownColor: Colors.white,
+          icon: Icon(Icons.keyboard_arrow_down, color: Colors.black),
           menuMaxHeight: 150,
           isExpanded: true,
           value: widget.pickedValue,

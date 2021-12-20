@@ -1,3 +1,4 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -63,7 +64,8 @@ class _GameScoreState extends State<GameScore> {
     var quizState = Provider.of<QuizModel>(context, listen: false);
     String id = stateUser.uid;
 
-    return Scaffold(
+    return Consumer<QuizModel>(
+      builder: (context, state, child) => Scaffold(
         appBar: AppBar(
           title:
               Text('Gamescore', style: Theme.of(context).textTheme.headline1),
@@ -76,20 +78,44 @@ class _GameScoreState extends State<GameScore> {
             } else if (newHighScore == null) {
               return Text("Loading");
             } else {
-              return noNewHighscoreView(quizState.points, currentHigh);
-              //return newHighscoreView(quizState.points, currentHigh);
+              //return noNewHighscoreView(quizState.points, currentHigh);
+              return newHighscoreView(quizState.points, currentHigh);
             }
           },
-        ));
+        ),
+      ),
+    );
   }
 
   Widget newHighscoreView(var newHighscore, var currentScore) {
+    const colorizeColors = [
+      Colors.red,
+      Colors.orange,
+      Colors.yellow,
+      Colors.white,
+      Colors.yellow,
+      Colors.orange,
+      Colors.red,
+    ];
+    const colorizeTextStyle = TextStyle(
+      fontSize: 40.0,
+      fontFamily: 'Horizon',
+      fontWeight: FontWeight.bold,
+    );
+
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: Column(
         children: [
           confetti(),
-          Text('NEW HIGHSCORE!', style: TextStyle(fontSize: 20)),
+          AnimatedTextKit(
+            animatedTexts: [
+              ColorizeAnimatedText('NEW HIGHSCORE!',
+              speed: const Duration(seconds: 1),
+                  textStyle: colorizeTextStyle, colors: colorizeColors)
+            ],
+            totalRepeatCount: 5,
+          ),
           Container(height: 15),
           Icon(
             Icons.emoji_emotions,
@@ -113,7 +139,26 @@ class _GameScoreState extends State<GameScore> {
       padding: const EdgeInsets.all(15.0),
       child: Column(
         children: [
-          Text('No new highscore...', style: TextStyle(fontSize: 20)),
+          AnimatedTextKit(
+            animatedTexts: [
+              TypewriterAnimatedText(
+                'No new highscore...',
+                speed: const Duration(milliseconds: 150),
+                textStyle: const TextStyle(
+                    fontSize: 35,
+                    fontFamily: 'Horizon',
+                    fontWeight: FontWeight.bold),
+              ),
+              TypewriterAnimatedText(
+                'Good luck next time.',
+                speed: const Duration(milliseconds: 150),
+                textStyle: const TextStyle(
+                    fontSize: 35,
+                    fontFamily: 'Horizon',
+                    fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
           Container(height: 15),
           Icon(
             Icons.thumb_down,

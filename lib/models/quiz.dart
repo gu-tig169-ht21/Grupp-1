@@ -54,6 +54,7 @@ class QuizModel extends ChangeNotifier {
   Timer? questionTimer;
   late int _timeCounter;
   late int _nextQuestionCounter;
+  late int _startGameCountDown;
 
   GameState _gameState = GameState.ready;
   GameState get gameState => _gameState;
@@ -84,6 +85,7 @@ class QuizModel extends ChangeNotifier {
   int get points => _points;
   int get timeCounter => _timeCounter;
   int get nextQuestionCounter => _nextQuestionCounter;
+  int get startGameCountDown => _startGameCountDown;
   int get getcurrentQuestionIndex => currentQuestionIndex;
 
 //Method to get Quiz
@@ -213,16 +215,17 @@ class QuizModel extends ChangeNotifier {
 
 //Init countDown for user to Get ready
   void initCountDown() {
-    int countDown = 3;
-    const oneSec = const Duration(seconds: 1);
+    _startGameCountDown = 10;
+    const oneSec = Duration(seconds: 1);
     Timer timer = Timer.periodic(oneSec, (timer) {
-      if (countDown == 0) {
+      if (_startGameCountDown == 0) {
         timer.cancel();
         setGameState(GameState.showQuestion);
         _countDown(); // Activates counter for questions
       } else {
-        countDown--;
+        _startGameCountDown--;
       }
+      notifyListeners();
     });
   }
 
@@ -255,8 +258,6 @@ class QuizModel extends ChangeNotifier {
       if (_nextQuestionCounter == 0) {
         nextQuestion();
         nextQuestionTimer?.cancel();
-        _nextQuestionCounter = 5;
-        _timeCounter = 5;
         _countDown();
       } else if (questionList.length == currentQuestionIndex) {
         nextQuestionTimer?.cancel();

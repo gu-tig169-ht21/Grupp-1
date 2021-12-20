@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/rendering.dart';
 import 'package:quizapp/models/user.dart';
+import 'package:quizapp/screens/shared/loading.dart';
 import 'package:quizapp/services/user_service.dart';
 
 class Profile extends StatelessWidget {
-  Profile({Key? key}) : super(key: key);
+  const Profile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,65 +17,58 @@ class Profile extends StatelessWidget {
     AuthUser user = Provider.of<AuthUser>(context);
 
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title:
-              Text('Quizmaster', style: Theme.of(context).textTheme.headline4),
-          actions: [
-            TextButton.icon(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.person,
-                  color: Colors.orange,
-                  size: 30,
-                ),
-                label: const Text(
-                  'Scores',
-                  style: TextStyle(color: Colors.orange),
-                )),
-          ],
+          title: Text('Profile', style: Theme.of(context).textTheme.headline4),
+          centerTitle: true,
         ),
         body: StreamBuilder<DocumentSnapshot>(
             stream: UserService(uid: user.uid).getUserInformation(),
             builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+              // Felhantering om inga data kommer
               if (!snapshot.hasData) {
-                return Text("Loading...");
+                return const FloatingLoadingText();
               }
 
               final data = snapshot.requireData;
               final fieldText = TextEditingController();
 
-              return SingleChildScrollView(
+              return Container(
+                margin: const EdgeInsets.all(20),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    textHeader('Your profile'),
                     informationHolder(context, data),
-                    textHeader('Update profile'),
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                      child: TextField(
-                        controller: fieldText,
-                        onChanged: (value) {
-                          displayName = value;
-                        },
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'New name',
-                          labelStyle: TextStyle(color: Colors.white),
-                          hintText: 'Enter new name',
-                        ),
+                    const SizedBox(height: 20),
+                    const SizedBox(height: 5),
+                    TextField(
+                      controller: fieldText,
+                      onChanged: (value) {
+                        displayName = value;
+                      },
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(19.0)),
+                        labelText: 'Change username',
+                        labelStyle: const TextStyle(color: Colors.white),
+                        hintText: 'Enter new username',
                       ),
                     ),
-                    emailBox(),
-                    passwordBox(),
-                    TextButton(
+                    const SizedBox(height: 9),
+                    ElevatedButton(
+                        style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ))),
                         onPressed: () {
-                          UserService(uid: user.uid)
-                              .updateUserName(displayName);
+                          if (displayName.isNotEmpty) {
+                            UserService(uid: user.uid)
+                                .updateUserName(displayName);
+                          }
                           fieldText.clear();
-                  
                         },
-                        child: Text("Uppdatera information"))
+                        child: const Text("Update"))
                   ],
                 ),
               );
@@ -82,81 +76,27 @@ class Profile extends StatelessWidget {
   }
 }
 
-Widget textHeader(String text) {
-  return Padding(
-    padding: const EdgeInsets.all(15.0),
-    child: Column(
-      children: [
-        Text(text, style: TextStyle(fontSize: 30)),
-      ],
-    ),
-  );
-}
-
 Widget informationHolder(context, DocumentSnapshot documentSnapshot) {
-  var state = Provider.of<AuthUser?>(context);
-
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-    child: Container(
-      width: double.infinity,
-      height: 230,
+  return Container(
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(
-          color: Colors.black,
           width: 5,
         ),
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(20),
       ),
-      child: Column(
-        children: [
-          tileFormat('User name:', documentSnapshot["UserName"]),
-          tileFormat('Email address:', documentSnapshot["email"]),
-          tileFormat('Password', obscureText('123456')),
-        ],
-      ),
-    ),
-  );
-}
-
-String obscureText(String text) {
-  return text.replaceAll(RegExp(r"."), "*");
+      child: Column(children: [
+        tileFormat("Username:", documentSnapshot["UserName"]),
+        tileFormat("Highscore:", documentSnapshot["HighScore"].toString()),
+      ]));
 }
 
 Widget tileFormat(String title, String subtitle) {
   return ListTile(
     title: Text(title,
-        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
-    subtitle: Text(subtitle, style: TextStyle(color: Colors.black)),
-  );
-}
-
-Widget emailBox() {
-  return const Padding(
-    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-    child: TextField(
-      decoration: InputDecoration(
-        border: OutlineInputBorder(),
-        labelText: 'New email address',
-        labelStyle: TextStyle(color: Colors.white),
-        hintText: 'Enter new email address',
-      ),
-    ),
-  );
-}
-
-Widget passwordBox() {
-  return const Padding(
-    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-    child: TextField(
-      obscureText: true,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(),
-        labelText: 'New password',
-        labelStyle: TextStyle(color: Colors.white),
-        hintText: 'Enter new password',
-      ),
-    ),
+        style: const TextStyle(
+            fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black)),
+    subtitle: Text(subtitle,
+        style: const TextStyle(color: Colors.black, fontSize: 18)),
   );
 }

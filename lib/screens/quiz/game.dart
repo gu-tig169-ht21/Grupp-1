@@ -6,8 +6,7 @@ import 'package:quizapp/screens/quiz/game_score.dart';
 import 'package:quizapp/screens/quiz/init_game.dart';
 
 class GameUI extends StatelessWidget {
-  GameUI({Key? key}) : super(key: key);
-  String selected = "";
+  const GameUI({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

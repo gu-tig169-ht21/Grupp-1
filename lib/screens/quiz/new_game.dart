@@ -1,6 +1,5 @@
-///SPO
+// ignore_for_file: must_be_immutable
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/models/quiz.dart';
@@ -8,14 +7,13 @@ import 'package:quizapp/screens/quiz/game.dart';
 import 'package:quizapp/screens/shared/logo.dart';
 
 class NewGame extends StatelessWidget {
-  const NewGame({Key? key}) : super(key: key);
+  String? category;
+  String? difficulty;
+  NewGame({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var state = Provider.of<QuizModel>(context, listen: false);
-
-    String category;
-    String difficulty;
 
     void setCategory(String value) {
       category = value;
@@ -29,14 +27,14 @@ class NewGame extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("New Game"),
+        title: const Text("New Game"),
         centerTitle: true,
       ),
       body: Container(
-        margin: EdgeInsets.fromLTRB(20, 50, 20, 0),
+        margin: const EdgeInsets.fromLTRB(20, 50, 20, 0),
         child: Column(
           children: [
-            Logo(),
+            const Logo(),
             const SizedBox(height: 50),
             Container(
                 alignment: Alignment.topLeft,
@@ -71,7 +69,7 @@ class NewGame extends StatelessWidget {
                   await state.getQuiz();
                   state.setGameState(GameState.init);
                   Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => GameUI()));
+                      MaterialPageRoute(builder: (context) => const GameUI()));
                 },
                 child: const Text(
                   'Start Game',
@@ -85,15 +83,15 @@ class NewGame extends StatelessWidget {
 }
 
 class QuizTypePicker extends StatefulWidget {
+  String? pickedValue;
+  List<String> valueList;
+  Function setValue;
   QuizTypePicker(
       {Key? key,
       required this.pickedValue,
       required this.valueList,
       required this.setValue})
       : super(key: key);
-  String? pickedValue;
-  var valueList;
-  Function setValue;
 
   @override
   _QuizTypePickerState createState() => _QuizTypePickerState();
@@ -112,7 +110,7 @@ class _QuizTypePickerState extends State<QuizTypePicker> {
       ),
       child: DropdownButton(
         dropdownColor: Colors.white,
-        icon: Icon(Icons.keyboard_arrow_down, color: Colors.black),
+        icon: const Icon(Icons.keyboard_arrow_down, color: Colors.black),
         menuMaxHeight: 150,
         isExpanded: true,
         value: widget.pickedValue,

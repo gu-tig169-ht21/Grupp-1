@@ -1,7 +1,6 @@
 // ignore_for_file: unused_element
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/models/user.dart';
 import 'package:quizapp/services/user_service.dart';
@@ -15,21 +14,11 @@ class Highscore extends StatelessWidget {
 
     return Scaffold(
         appBar: AppBar(
-          title:
-              Text('Quiz Master', style: Theme.of(context).textTheme.headline4),
-          actions: [
-            TextButton.icon(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.keyboard_arrow_right,
-                  color: Colors.orange,
-                  size: 30,
-                ),
-                label: Text(
-                  'Your scores',
-                  style: TextStyle(color: Colors.orange),
-                )),
-          ],
+          centerTitle: true,
+          title: Text(
+            'Quiz Master',
+            style: Theme.of(context).textTheme.headline4,
+          ),
         ),
         body: StreamBuilder<QuerySnapshot>(
             stream: UserService(uid: user.uid).getUserHighScore(),
@@ -72,7 +61,10 @@ class Highscore extends StatelessWidget {
       padding: const EdgeInsets.all(15.0),
       child: Column(
         children: [
-          Text(text, style: TextStyle(fontSize: 30)),
+          Text(
+            text,
+            style: const TextStyle(fontSize: 30),
+          ),
         ],
       ),
     );
@@ -93,15 +85,19 @@ class Highscore extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
         ),
         child: ListTile(
-          title:
-              Text(currentUser, style: TextStyle(fontSize: 40, color: Colors.black)),
+          title: Text(
+            currentUser,
+            style: const TextStyle(fontSize: 40, color: Colors.black),
+          ),
           leading: const Icon(
             Icons.stars,
             color: Colors.orange,
             size: 40,
           ),
-          trailing: Text('${currentUserScore} p',
-              style: TextStyle(fontSize: 30, color: Colors.black)),
+          trailing: Text(
+            '$currentUserScore p',
+            style: const TextStyle(fontSize: 30, color: Colors.black),
+          ),
         ),
       ),
     );
@@ -112,10 +108,14 @@ class Highscore extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       selected: true,
       selectedTileColor: Colors.orange,
-      title: Text('${document["UserName"]}',
-          style: TextStyle(fontSize: 20, color: Colors.white)),
-      trailing: Text("${document["HighScore"]}",
-          style: TextStyle(fontSize: 20, color: Colors.white)),
+      title: Text(
+        '${document["UserName"]}',
+        style: const TextStyle(fontSize: 20, color: Colors.white),
+      ),
+      trailing: Text(
+        "${document["HighScore"]}",
+        style: const TextStyle(fontSize: 20, color: Colors.white),
+      ),
     );
   }
 }

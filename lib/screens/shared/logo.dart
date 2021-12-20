@@ -6,7 +6,7 @@ class Logo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image(
+    return const Image(
       image: AssetImage('assets/trans_logo.png'),
     );
   }

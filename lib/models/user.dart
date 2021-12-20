@@ -1,7 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:quizapp/services/auth_service.dart';
-import 'package:quizapp/services/user_service.dart';
 
 //Model for Authenticated user
 class AuthUser {
@@ -11,7 +9,6 @@ class AuthUser {
 
   @override
   String toString() {
-    // TODO: implement toString
     return uid;
   }
 }
@@ -31,7 +28,6 @@ class UserData {
       this.score = 0});
   @override
   String toString() {
-    // TODO: implement toString
     return "$displayName and Score: $score";
   }
 }

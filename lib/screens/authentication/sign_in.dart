@@ -5,10 +5,9 @@ import 'package:quizapp/screens/authentication/reset_password.dart';
 import 'package:quizapp/screens/shared/constant.dart';
 import 'package:quizapp/screens/shared/loading.dart';
 import 'package:quizapp/screens/shared/logo.dart';
-import 'package:quizapp/services/auth_service.dart';
 
 class SignIn extends StatefulWidget {
-  SignIn({Key? key}) : super(key: key);
+  const SignIn({Key? key}) : super(key: key);
 
   @override
   _SignInState createState() => _SignInState();
@@ -21,7 +20,7 @@ class _SignInState extends State<SignIn> {
   String error = "";
   final _formKey = GlobalKey<FormState>();
 
-  UserState _state = UserState();
+  final UserState _state = UserState();
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +36,10 @@ class _SignInState extends State<SignIn> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Logo(),
-                      SizedBox(height: 20),
+                      const Logo(),
+                      const SizedBox(
+                        height: 20,
+                      ),
                       TextFormField(
                         validator: (value) =>
                             value!.isEmpty ? "Enter email" : null,
@@ -69,14 +70,17 @@ class _SignInState extends State<SignIn> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           TextButton(
-                              onPressed: () async {
-                                var result = await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => ResetPassword()));
-                                print(email);
-                              },
-                              child: const Text("Forgot password?")),
+                            onPressed: () async {
+                              await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const ResetPassword(),
+                                ),
+                              );
+                              //print(email);
+                            },
+                            child: const Text("Forgot password?"),
+                          ),
                         ],
                       ),
                       Text(error),

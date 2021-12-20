@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:quizapp/models/user.dart';
-import 'package:quizapp/services/auth_service.dart';
 import 'package:quizapp/services/quiz_service.dart';
 import 'dart:async';
 
@@ -16,57 +13,44 @@ class Question {
   String type;
   String difficulty;
   String question;
-  String correct_answer;
-  List<dynamic> incorrect_answers;
+  String correctAnswer;
+  List<dynamic> incorrectAnswers;
   List<String> answers = [];
-  Color colors = Colors.grey;
 
   Question(
       {required this.category,
       required this.type,
       required this.difficulty,
       required this.question,
-      required this.correct_answer,
-      required this.incorrect_answers});
+      required this.correctAnswer,
+      required this.incorrectAnswers});
 
-  // Converting from json to a question object
   static Question fromJson(dynamic json) {
     return Question(
         category: json['category'],
         type: json['type'],
         difficulty: json['difficulty'],
         question: json['question'],
-        correct_answer: json['correct_answer'],
-        incorrect_answers:
+        correctAnswer: json['correct_answer'],
+        incorrectAnswers:
             (json['incorrect_answers'] as List).map((map) => map).toList());
   }
 }
 
-enum GameState { ready, init, showQuestion, ShowColors, QuizDone }
+enum GameState { ready, init, showQuestion, showColors, quizDone }
 
 class QuizModel extends ChangeNotifier {
-  //List of Question objects
   List<Question> questionList = [];
   int _points = 0;
-
   int currentQuestionIndex = 0;
   Timer? nextQuestionTimer;
   Timer? questionTimer;
+  Timer? initTimer;
   late int _timeCounter;
   late int _nextQuestionCounter;
   late int _startGameCountDown;
-
-  GameState _gameState = GameState.ready;
-  GameState get gameState => _gameState;
-
-  void setGameState(GameState state) {
-    _gameState = state;
-    notifyListeners();
-  }
-
-  //Data from user for type of quiz to API
   String pickedCategory = 'Random';
-  var categoryList = [
+  List<String> categoryList = [
     'Random',
     'Sports',
     'Animals',
@@ -77,18 +61,17 @@ class QuizModel extends ChangeNotifier {
     'Computers'
   ];
   String? pickedDifficulty = 'easy';
-  var difficultyList = ['easy', 'medium', 'hard'];
+  List<String> difficultyList = ['easy', 'medium', 'hard'];
+  GameState _gameState = GameState.ready;
 
-  //Getter for list
   List<Question> get getQuizList => questionList;
-
   int get points => _points;
   int get timeCounter => _timeCounter;
   int get nextQuestionCounter => _nextQuestionCounter;
   int get startGameCountDown => _startGameCountDown;
   int get getcurrentQuestionIndex => currentQuestionIndex;
+  GameState get gameState => _gameState;
 
-//Method to get Quiz
   Future<void> getQuiz() async {
     int categoryId = 0;
 
@@ -146,31 +129,32 @@ class QuizModel extends ChangeNotifier {
     questionList = await QuizService.getQuiz(categoryId, pickedDifficulty!);
 
     for (var item in questionList) {
-      item.answers.add(item.correct_answer);
+      item.answers.add(item.correctAnswer);
 
-      for (var i = 0; i < item.incorrect_answers.length; i++) {
-        item.answers.add(item.incorrect_answers[i]);
+      for (var i = 0; i < item.incorrectAnswers.length; i++) {
+        item.answers.add(item.incorrectAnswers[i]);
       }
       item.answers.shuffle();
     }
 
-    //Reset for new game
     currentQuestionIndex = 0;
     _points = 0;
 
     initCountDown();
   }
 
-//////////////////////////GAME LOGIC//////////////////////
+  void setGameState(GameState state) {
+    _gameState = state;
+    notifyListeners();
+  }
 
-//Set Colors for Right and Wrong Ansers
   Color? setColor(int index) {
-    if (_gameState == GameState.ShowColors) {
+    if (_gameState == GameState.showColors) {
       var question = questionList[currentQuestionIndex];
 
       String currentIndex = question.answers[index];
 
-      if (currentIndex == question.correct_answer) {
+      if (currentIndex == question.correctAnswer) {
         return Colors.green;
       } else {
         return Colors.red;
@@ -185,7 +169,7 @@ class QuizModel extends ChangeNotifier {
   }
 
   void checkAnswer(String value) {
-    if (value == questionList[currentQuestionIndex].correct_answer) {
+    if (value == questionList[currentQuestionIndex].correctAnswer) {
       int timePoints = _timeCounter;
 
       if (pickedDifficulty == 'hard') {
@@ -201,7 +185,7 @@ class QuizModel extends ChangeNotifier {
     questionTimer?.cancel();
     _nextQuestionCountDown();
 
-    setGameState(GameState.ShowColors);
+    setGameState(GameState.showColors);
 
     notifyListeners();
   }
@@ -213,11 +197,10 @@ class QuizModel extends ChangeNotifier {
     notifyListeners();
   }
 
-//Init countDown for user to Get ready
   void initCountDown() {
     _startGameCountDown = 6;
     const oneSec = Duration(seconds: 1);
-    Timer timer = Timer.periodic(oneSec, (timer) {
+    initTimer = Timer.periodic(oneSec, (timer) {
       if (_startGameCountDown == 0) {
         timer.cancel();
         setGameState(GameState.showQuestion);
@@ -237,7 +220,7 @@ class QuizModel extends ChangeNotifier {
         ), (Timer timer) {
       if (_timeCounter == 0) {
         questionTimer?.cancel();
-        setGameState(GameState.ShowColors);
+        setGameState(GameState.showColors);
         _nextQuestionCountDown();
       } else if (questionList.length == currentQuestionIndex) {
         questionTimer?.cancel();
@@ -252,7 +235,7 @@ class QuizModel extends ChangeNotifier {
   void _nextQuestionCountDown() {
     _nextQuestionCounter = 5;
     nextQuestionTimer = Timer.periodic(
-        Duration(
+        const Duration(
           seconds: 1,
         ), (timer) {
       if (_nextQuestionCounter == 0) {

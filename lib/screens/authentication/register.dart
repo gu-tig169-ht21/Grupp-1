@@ -3,7 +3,6 @@ import 'package:quizapp/models/user.dart';
 import 'package:quizapp/screens/shared/constant.dart';
 import 'package:quizapp/screens/shared/loading.dart';
 import 'package:quizapp/screens/shared/logo.dart';
-import 'package:quizapp/services/auth_service.dart';
 
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
@@ -19,8 +18,7 @@ class _RegisterState extends State<Register> {
   bool isLoading = false;
   String error = "";
   final _formKey = GlobalKey<FormState>();
-  AuthService _auth = AuthService();
-  UserState _state = UserState();
+  final UserState _state = UserState();
 
   bool validEmail(String email) {
     return RegExp(
@@ -101,7 +99,7 @@ class _RegisterState extends State<Register> {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           error,
-                          style: TextStyle(color: Colors.red),
+                          style: const TextStyle(color: Colors.red),
                         ),
                       ),
                       const SizedBox(height: 70),
@@ -109,33 +107,33 @@ class _RegisterState extends State<Register> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           ElevatedButton(
-                              style: elevatedButtonStyle.copyWith(
-                                  backgroundColor: MaterialStateProperty.all(
-                                      Colors.orange[800])),
-                              onPressed: () async {
-                                if (_formKey.currentState!.validate()) {
-                                  setState(() {
-                                    isLoading = true;
-                                  });
+                            style: elevatedButtonStyle.copyWith(
+                                backgroundColor: MaterialStateProperty.all(
+                                    Colors.orange[800])),
+                            onPressed: () async {
+                              if (_formKey.currentState!.validate()) {
+                                setState(() {
+                                  isLoading = true;
+                                });
 
-                                  dynamic result = await _state.register(
-                                      UserData(
-                                          id: "",
-                                          displayName: userName,
-                                          email: email,
-                                          password: password));
-                                  if (result == null) {
-                                    setState(() {
-                                      isLoading = false;
-                                      error = "Could not register";
-                                    });
-                                  } else {
-                                    Navigator.pop(context);
-                                  }
-                                  // Navigator.pop(context);
+                                dynamic result = await _state.register(UserData(
+                                    id: "",
+                                    displayName: userName,
+                                    email: email,
+                                    password: password));
+                                if (result == null) {
+                                  setState(() {
+                                    isLoading = false;
+                                    error = "Could not register";
+                                  });
+                                } else {
+                                  Navigator.pop(context);
                                 }
-                              },
-                              child: const Text("Register")),
+                                // Navigator.pop(context);
+                              }
+                            },
+                            child: const Text("Register"),
+                          ),
                         ],
                       )
                     ],

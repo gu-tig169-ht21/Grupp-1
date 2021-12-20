@@ -23,15 +23,13 @@ class GameUI extends StatelessWidget {
                     style: Theme.of(context).textTheme.headline1),
               ),
               body: state.gameState == GameState.init
-                  ? InitGame()
+                  ? const InitGame()
                   : Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         headerWidget(context),
-                        Text(
-                          HtmlCharacterEntities.decode(
-                              state.getQuestion().question),
-                        ),
+                        progressIndicator(context),
+                        question(context),
                         Expanded(
                           child: ListView.builder(
                             itemCount: state.getQuestion().answers.length,
@@ -65,16 +63,12 @@ class GameUI extends StatelessWidget {
 
   Widget headerWidget(context) {
     return Padding(
-      padding: const EdgeInsets.only(
-        top: 20,
-        right: 20,
-        left: 20,
-      ),
+      padding: const EdgeInsets.all(8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           timerWidget(context),
-          questionWidget(context),
+          questionIndexWidget(context),
           scoreWidget(context),
         ],
       ),
@@ -95,37 +89,36 @@ class GameUI extends StatelessWidget {
       }
     }
 
+    return setText();
+  }
+
+  Widget progressIndicator(context) {
     return Consumer<QuizModel>(
-      builder: (context, state, child) => Column(
-        children: [
-          setText(),
-          SizedBox(
-            height: 10,
-            width: 60,
-            child: LinearProgressIndicator(
-              backgroundColor: Colors.grey,
-              value: state.timeCounter / 30,
-              valueColor: state.timeCounter >= 20
-                  ? const AlwaysStoppedAnimation<Color>(Colors.green)
-                  : state.timeCounter >= 10
-                      ? const AlwaysStoppedAnimation<Color>(Colors.yellow)
-                      : const AlwaysStoppedAnimation<Color>(Colors.red),
-            ),
+      builder: (context, state, child) => Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SizedBox(
+          height: 10,
+          width: 300,
+          child: LinearProgressIndicator(
+            backgroundColor: Colors.grey,
+            value: state.timeCounter / 30,
+            valueColor: state.timeCounter >= 20
+                ? const AlwaysStoppedAnimation<Color>(Colors.green)
+                : state.timeCounter >= 10
+                    ? const AlwaysStoppedAnimation<Color>(Colors.yellow)
+                    : const AlwaysStoppedAnimation<Color>(Colors.red),
           ),
-        ],
+        ),
       ),
     );
   }
 
-  Widget questionWidget(context) {
+  Widget questionIndexWidget(context) {
     return Consumer<QuizModel>(
-      builder: (context, state, child) => Container(
-        child: Text(
-          "Question: ${state.getcurrentQuestionIndex + 1} of ${state.getQuizList.length}",
-          //state.getQuestion().category,
-          style: TextStyle(
-            fontSize: 15,
-          ),
+      builder: (context, state, child) => Text(
+        "Question: ${state.getcurrentQuestionIndex + 1} of ${state.getQuizList.length}",
+        style: const TextStyle(
+          fontSize: 15,
         ),
       ),
     );
@@ -133,11 +126,26 @@ class GameUI extends StatelessWidget {
 
   Widget scoreWidget(context) {
     return Consumer<QuizModel>(
+      builder: (context, state, child) => Text(
+        'Points: ${state.points}',
+        style: const TextStyle(
+          fontSize: 15,
+        ),
+      ),
+    );
+  }
+
+  Widget question(context) {
+    return Consumer<QuizModel>(
       builder: (context, state, child) => Container(
-        child: Text(
-          'Points: ${state.points}',
-          style: const TextStyle(
-            fontSize: 15,
+        margin: const EdgeInsets.all(20),
+        child: Center(
+          child: Text(
+            HtmlCharacterEntities.decode(state.getQuestion().question),
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),

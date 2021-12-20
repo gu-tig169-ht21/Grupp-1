@@ -9,43 +9,24 @@ class InitGame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<QuizModel>(
-      builder: (context, state, child) =>
-          state.startGameCountDown > 4 ? countDown(state) : getReady(),
+      builder: (context, state, child) => getReady(),
     );
   }
 
   Widget getReady() {
     return Align(
       child: AnimatedTextKit(
+        isRepeatingAnimation: true,
         animatedTexts: [
-          TyperAnimatedText(
+          FadeAnimatedText(
             'GET READY',
             textStyle: const TextStyle(
               fontSize: 40,
-              fontFamily: 'Horizon',
               fontWeight: FontWeight.bold,
             ),
           ),
         ],
         totalRepeatCount: 5,
-      ),
-    );
-  }
-
-  Widget countDown(state) {
-    return Center(
-      child: AnimatedTextKit(
-        animatedTexts: [
-          ScaleAnimatedText(
-            '${state.startGameCountDown}',
-            duration: const Duration(seconds: 1),
-            textStyle: const TextStyle(
-              fontSize: 40,
-              fontFamily: 'Horizon',
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
       ),
     );
   }

@@ -40,16 +40,13 @@ class UserState extends ChangeNotifier {
   final AuthService _auth = AuthService();
 
   //Register new User
-  void register(UserData user) async {
-    await _auth.registerWithWEmail(user);
-    notifyListeners();
+  Future register(UserData user) async {
+    return await _auth.registerWithWEmail(user);
   }
 
   //Sign In With email
-  void signIn(email, password) async {
-    User? result = await _auth.signIn(email, password);
-
-    //notifyListeners();
+  Future signIn(email, password) async {
+    return await _auth.signIn(email, password);
   }
 
   // Logga ut

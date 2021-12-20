@@ -143,7 +143,7 @@ class GameUI extends StatelessWidget {
           child: Text(
             HtmlCharacterEntities.decode(state.getQuestion().question),
             style: const TextStyle(
-              fontSize: 30,
+              fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
           ),

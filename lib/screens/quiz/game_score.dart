@@ -1,15 +1,11 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/models/quiz.dart';
 import 'package:quizapp/models/user.dart';
 import 'package:confetti/confetti.dart';
-import 'package:quizapp/models/user.dart';
-import 'package:quizapp/screens/home/highscore.dart';
 import 'package:quizapp/screens/shared/loading.dart';
 import 'package:quizapp/services/user_service.dart';
-import '';
 
 class GameScore extends StatefulWidget {
   const GameScore({Key? key}) : super(key: key);
@@ -40,7 +36,7 @@ class _GameScoreState extends State<GameScore> {
     return userData["HighScore"];
   }
 
-  bool? newHighScore = null;
+  bool? newHighScore;
   int currentHigh = 0;
 
   Future<bool?> saveScore(String id, int points) async {
@@ -80,7 +76,7 @@ class _GameScoreState extends State<GameScore> {
             if (newHigh.data == true) {
               return newHighscoreView(quizState.points, currentHigh);
             } else if (newHigh.data == null) {
-              return Loading();
+              return const Loading();
             } else {
               return noNewHighscoreView(quizState.points, currentHigh);
             }
@@ -121,16 +117,16 @@ class _GameScoreState extends State<GameScore> {
             totalRepeatCount: 5,
           ),
           Container(height: 15),
-          Icon(
+          const Icon(
             Icons.emoji_emotions,
             size: 170,
           ),
           ListTile(
-            title: Text("Points received & your new highscore: "),
+            title: const Text("Points received & your new highscore: "),
             subtitle: Text("$newHighscore p"),
           ),
           ListTile(
-            title: Text("Previous score: "),
+            title: const Text("Previous score: "),
             subtitle: Text("$currentScore p"),
           ),
         ],
@@ -164,16 +160,16 @@ class _GameScoreState extends State<GameScore> {
             ],
           ),
           Container(height: 15),
-          Icon(
+          const Icon(
             Icons.thumb_down,
             size: 170,
           ),
           ListTile(
-            title: Text("Points received: "),
+            title: const Text("Points received: "),
             subtitle: Text("$points p"),
           ),
           ListTile(
-            title: Text("Current highscore: "),
+            title: const Text("Current highscore: "),
             subtitle: Text("$currentScore p"),
           ),
         ],

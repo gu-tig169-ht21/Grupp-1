@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:quizapp/models/user.dart';
-import 'package:quizapp/services/user_service.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final FirebaseFirestore databaseReference = FirebaseFirestore.instance;
@@ -60,7 +59,7 @@ class AuthService {
 
   Future<void> signOut() async {
     await _auth.signOut();
-    print("User signedOut");
+    //print("User signedOut");
   }
 
   void sendResetPasswordLink(email) {

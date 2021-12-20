@@ -13,7 +13,7 @@ class _FloatingLoadingTextState extends State<FloatingLoadingText> {
   @override
   Widget build(BuildContext context) {
     return TextLiquidFill(
-      waveDuration: Duration(seconds: 3),
+      waveDuration: const Duration(seconds: 3),
       boxBackgroundColor: Colors.blue,
       text: 'Loading',
       waveColor: Colors.orangeAccent,
@@ -30,12 +30,10 @@ class Loading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-        child: SpinKitChasingDots(
-          color: Colors.orange[800],
-          size: 50.0,
-        ),
+    return Center(
+      child: SpinKitChasingDots(
+        color: Colors.orange[800],
+        size: 50.0,
       ),
     );
   }

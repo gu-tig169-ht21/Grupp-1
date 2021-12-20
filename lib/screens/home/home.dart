@@ -1,60 +1,62 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:quizapp/models/quiz.dart';
-import 'package:quizapp/models/user.dart';
 import 'package:quizapp/screens/home/highscore.dart';
 import 'package:quizapp/screens/home/profile.dart';
-import 'package:quizapp/screens/quiz/game_score.dart';
 import 'package:quizapp/screens/quiz/new_game.dart';
 import 'package:quizapp/screens/shared/logo.dart';
 import 'package:quizapp/services/auth_service.dart';
-import 'package:quizapp/services/quiz_service.dart';
-import 'package:quizapp/services/user_service.dart';
 
 class Home extends StatelessWidget {
   Home({Key? key}) : super(key: key);
-  AuthService _auth = AuthService();
+  final AuthService _auth = AuthService();
 
   @override
   Widget build(BuildContext context) {
-    QuizModel _model = QuizModel();
-    var state = Provider.of<QuizModel>(context, listen: false);
-
     return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title:
-              Text('Quiz Master', style: Theme.of(context).textTheme.headline1),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.settings, color: Colors.white),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Profile()));
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.logout, color: Colors.white),
-              onPressed: () => _auth.signOut(),
-            )
-          ],
-        ),
-        body: Container(
-            child: Column(
-          children: [
-            Container(
-              height: 20,
-            ),
-            Logo(),
-            Container(
-              height: 150,
-            ),
-            //highScore(),
-            textButtonFormat(context, 'New Game', NewGame()),
-            textButtonFormat(context, 'Highscore', Highscore()),
-          ],
-        )));
+      appBar: AppBar(
+        centerTitle: true,
+        title:
+            Text('Quiz Master', style: Theme.of(context).textTheme.headline1),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings, color: Colors.white),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const Profile(),
+                ),
+              );
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.logout, color: Colors.white),
+            onPressed: () => _auth.signOut(),
+          )
+        ],
+      ),
+      body: Column(
+        children: [
+          Container(
+            height: 20,
+          ),
+          const Logo(),
+          Container(
+            height: 150,
+          ),
+          //highScore(),
+          textButtonFormat(
+            context,
+            'New Game',
+            NewGame(),
+          ),
+          textButtonFormat(
+            context,
+            'Highscore',
+            const Highscore(),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget textButtonFormat(context, String title, var screen) {
@@ -64,8 +66,8 @@ class Home extends StatelessWidget {
         children: [
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              shape: new RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(20.0),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
               ),
               minimumSize: const Size.fromHeight(
                 70,

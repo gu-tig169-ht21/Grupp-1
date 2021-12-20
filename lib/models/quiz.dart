@@ -151,7 +151,7 @@ class QuizModel extends ChangeNotifier {
       for (var i = 0; i < item.incorrect_answers.length; i++) {
         item.answers.add(item.incorrect_answers[i]);
       }
-      //item.answers.shuffle();
+      item.answers.shuffle();
     }
 
     //Reset for new game
@@ -215,7 +215,7 @@ class QuizModel extends ChangeNotifier {
 
 //Init countDown for user to Get ready
   void initCountDown() {
-    _startGameCountDown = 10;
+    _startGameCountDown = 6;
     const oneSec = Duration(seconds: 1);
     Timer timer = Timer.periodic(oneSec, (timer) {
       if (_startGameCountDown == 0) {

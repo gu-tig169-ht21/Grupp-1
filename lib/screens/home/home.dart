@@ -41,11 +41,22 @@ class Home extends StatelessWidget {
         body: Container(
             child: Column(
           children: [
+            image(),
             textButtonFormat(context, 'New Game', NewGame()),
             textButtonFormat(context, 'Highscore', Highscore()),
             textButtonFormat(context, 'GameScore', GameScore()),
           ],
         )));
+  }
+
+  Widget image() {
+    return Stack(
+      children: [
+        Image(
+          image: AssetImage('assets/trans_logo.png'),
+        )
+      ],
+    );
   }
 
   Widget textButtonFormat(context, String title, var screen) {

@@ -23,29 +23,36 @@ class Home extends StatelessWidget {
 
     return Scaffold(
         appBar: AppBar(
+          centerTitle: true,
           title:
               Text('Quiz Master', style: Theme.of(context).textTheme.headline1),
           actions: [
-            TextButton.icon(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Profile()));
-                },
-                icon: Icon(Icons.person, color: Colors.orange),
-                label: Text('Profile', style: TextStyle(color: Colors.orange))),
-            TextButton.icon(
-                onPressed: () => _auth.signOut(),
-                icon: Icon(Icons.logout, color: Colors.white),
-                label: Text('Log out', style: TextStyle(color: Colors.white))),
+            IconButton(
+              icon: Icon(Icons.settings, color: Colors.white),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Profile()));
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.logout, color: Colors.white),
+              onPressed: () => _auth.signOut(),
+            )
           ],
         ),
         body: Container(
             child: Column(
           children: [
+            Container(
+              height: 20,
+            ),
             Logo(),
+            Container(
+              height: 150,
+            ),
+            //highScore(),
             textButtonFormat(context, 'New Game', NewGame()),
             textButtonFormat(context, 'Highscore', Highscore()),
-            textButtonFormat(context, 'GameScore', GameScore()),
           ],
         )));
   }
@@ -57,8 +64,11 @@ class Home extends StatelessWidget {
         children: [
           ElevatedButton(
             style: ElevatedButton.styleFrom(
+              shape: new RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(20.0),
+              ),
               minimumSize: const Size.fromHeight(
-                40,
+                70,
               ),
             ),
             onPressed: () {
@@ -73,5 +83,15 @@ class Home extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget highScore() {
+    return Stack(children: [
+      Container(
+        width: 500,
+        height: 250,
+        color: Colors.green,
+      ),
+    ]);
   }
 }

@@ -7,6 +7,7 @@ import 'package:quizapp/screens/home/highscore.dart';
 import 'package:quizapp/screens/home/profile.dart';
 import 'package:quizapp/screens/quiz/game_score.dart';
 import 'package:quizapp/screens/quiz/new_game.dart';
+import 'package:quizapp/screens/shared/logo.dart';
 import 'package:quizapp/services/auth_service.dart';
 import 'package:quizapp/services/quiz_service.dart';
 import 'package:quizapp/services/user_service.dart';
@@ -41,22 +42,12 @@ class Home extends StatelessWidget {
         body: Container(
             child: Column(
           children: [
-            image(),
+            Logo(),
             textButtonFormat(context, 'New Game', NewGame()),
             textButtonFormat(context, 'Highscore', Highscore()),
             textButtonFormat(context, 'GameScore', GameScore()),
           ],
         )));
-  }
-
-  Widget image() {
-    return Stack(
-      children: [
-        Image(
-          image: AssetImage('assets/trans_logo.png'),
-        )
-      ],
-    );
   }
 
   Widget textButtonFormat(context, String title, var screen) {

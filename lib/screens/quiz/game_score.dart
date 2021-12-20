@@ -78,8 +78,8 @@ class _GameScoreState extends State<GameScore> {
             } else if (newHighScore == null) {
               return Text("Loading");
             } else {
-              //return noNewHighscoreView(quizState.points, currentHigh);
-              return newHighscoreView(quizState.points, currentHigh);
+              return noNewHighscoreView(quizState.points, currentHigh);
+              //return newHighscoreView(quizState.points, currentHigh);
             }
           },
         ),

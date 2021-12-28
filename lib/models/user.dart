@@ -21,7 +21,7 @@ class UserData {
   int? score;
 
   UserData(
-      {required this.id,
+      {this.id = "",
       required this.displayName,
       required this.email,
       this.password = "",

@@ -160,7 +160,7 @@ class QuizModel extends ChangeNotifier {
         return Colors.red;
       }
     } else {
-      return Colors.grey;
+      return Colors.blueGrey[800];
     }
   }
 

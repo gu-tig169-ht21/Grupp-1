@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:quizapp/models/quiz.dart';
 import 'package:quizapp/screens/home/highscore.dart';
 import 'package:quizapp/screens/home/profile.dart';
 import 'package:quizapp/screens/quiz/new_game.dart';
@@ -34,56 +36,60 @@ class Home extends StatelessWidget {
           )
         ],
       ),
-      body: Column(
-        children: [
-          Container(
-            height: 20,
-          ),
-          const Logo(),
-          Container(
-            height: 150,
-          ),
-          //highScore(),
-          textButtonFormat(
-            context,
-            'New Game',
-            NewGame(),
-          ),
-          textButtonFormat(
-            context,
-            'Highscore',
-            const Highscore(),
-          ),
-        ],
+      body: Container(
+        margin: const EdgeInsets.only(top: 90, bottom: 50),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Logo(),
+            Container(
+              margin: const EdgeInsets.only(right: 20, left: 20),
+              child: Column(
+                children: [
+                  textButtonFormat(
+                    context,
+                    'New Game',
+                    NewGame(),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  textButtonFormat(
+                    context,
+                    'Highscore',
+                    const Highscore(),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget textButtonFormat(context, String title, var screen) {
-    return Padding(
-      padding: const EdgeInsets.all(15.0),
-      child: Column(
-        children: [
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-              minimumSize: const Size.fromHeight(
-                70,
-              ),
+    return Column(
+      children: [
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
             ),
-            onPressed: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => screen));
-            },
-            child: Text(
-              title,
-              style: const TextStyle(fontSize: 20, color: Colors.white),
+            minimumSize: const Size.fromHeight(
+              70,
             ),
           ),
-        ],
-      ),
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => screen));
+          },
+          child: Text(
+            title,
+            style: const TextStyle(fontSize: 20, color: Colors.white),
+          ),
+        ),
+      ],
     );
   }
 

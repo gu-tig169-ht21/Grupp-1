@@ -67,7 +67,7 @@ class _GameScoreState extends State<GameScore> {
       builder: (context, state, child) => Scaffold(
         appBar: AppBar(
           title:
-              Text('Game score', style: Theme.of(context).textTheme.headline1),
+              Text('Gamescore', style: Theme.of(context).textTheme.headline1),
           centerTitle: true,
         ),
         body: FutureBuilder(

@@ -45,8 +45,7 @@ class GameUI extends StatelessWidget {
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
                               return Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
                                 child: Card(
                                   elevation: 10,
                                   child: ListTile(

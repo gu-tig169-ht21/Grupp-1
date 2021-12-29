@@ -47,7 +47,7 @@ class QuizModel extends ChangeNotifier {
   Timer? questionTimer;
   Timer? initTimer;
   late int _timeCounter;
-  late int _nextQuestionCounter;
+  int _nextQuestionCounter = 5;
   late int _startGameCountDown;
   String pickedCategory = 'Random';
   List<String> categoryList = [

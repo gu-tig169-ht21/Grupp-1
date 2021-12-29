@@ -32,7 +32,8 @@ class _SignInState extends State<SignIn> {
             body: SingleChildScrollView(
               reverse: true,
               child: Container(
-                margin: const EdgeInsets.only(top: 120, right: 20, left: 20),
+                margin: const EdgeInsets.only(
+                    top: 120, right: 20, left: 20, bottom: 5),
                 child: Form(
                   key: _formKey,
                   child: Column(
@@ -110,18 +111,17 @@ class _SignInState extends State<SignIn> {
                                     setState(() {
                                       isLoading = true;
                                     });
-                                  }
 
-                                  var result =
-                                      await _state.signIn(email, password);
-                                  if (result == null) {
-                                    setState(() {
-                                      isLoading = false;
-                                    });
-
-                                    Fluttertoast.showToast(
-                                        msg: "Could not sign in",
-                                        gravity: ToastGravity.TOP);
+                                    var result =
+                                        await _state.signIn(email, password);
+                                    if (result == null) {
+                                      setState(() {
+                                        isLoading = false;
+                                        Fluttertoast.showToast(
+                                            msg: "Could not sign in",
+                                            gravity: ToastGravity.TOP);
+                                      });
+                                    }
                                   }
                                 },
                                 child: const Text(

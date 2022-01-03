@@ -45,7 +45,7 @@ class QuizModel extends ChangeNotifier {
   int currentQuestionIndex = 0;
   Timer nextQuestionTimer = Timer(const Duration(seconds: 1), () {});
   Timer questionTimer = Timer(const Duration(seconds: 1), () {});
-  Timer? initTimer;
+  Timer initTimer = Timer(const Duration(seconds: 1), () {});
   late int _timeCounter;
   int _nextQuestionCounter = 5;
   late int _startGameCountDown;
@@ -182,7 +182,7 @@ class QuizModel extends ChangeNotifier {
     }
 
     _timeCounter = 0;
-    questionTimer?.cancel();
+    questionTimer.cancel();
     _nextQuestionCountDown();
 
     setGameState(GameState.showColors);
@@ -219,11 +219,11 @@ class QuizModel extends ChangeNotifier {
           seconds: 1,
         ), (Timer timer) {
       if (_timeCounter == 0) {
-        questionTimer?.cancel();
+        questionTimer.cancel();
         setGameState(GameState.showColors);
         _nextQuestionCountDown();
       } else if (questionList.length == currentQuestionIndex) {
-        questionTimer?.cancel();
+        questionTimer.cancel();
         setGameState(GameState.ready);
       } else {
         _timeCounter--;
@@ -240,10 +240,10 @@ class QuizModel extends ChangeNotifier {
         ), (timer) {
       if (_nextQuestionCounter == 0) {
         nextQuestion();
-        nextQuestionTimer?.cancel();
+        nextQuestionTimer.cancel();
         _countDown();
       } else if (questionList.length == currentQuestionIndex) {
-        nextQuestionTimer?.cancel();
+        nextQuestionTimer.cancel();
         setGameState(GameState.ready);
       } else {
         _nextQuestionCounter--;

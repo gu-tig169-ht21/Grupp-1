@@ -8,14 +8,38 @@ import 'package:quizapp/screens/quiz/init_game.dart';
 class GameUI extends StatelessWidget {
   const GameUI({Key? key}) : super(key: key);
 
+  Future<bool> quitDialog(QuizModel state, BuildContext context) async {
+    bool quitGame = false;
+    await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: const Text("Quit Quiz?"),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      state.questionTimer.cancel();
+                      state.nextQuestionTimer.cancel();
+                      state.initTimer.cancel();
+                      quitGame = true;
+                      Navigator.pop(context, quitGame);
+                    },
+                    child: const Text("Yes")),
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context, rootNavigator: false).pop();
+                    },
+                    child: const Text("No")),
+              ],
+            ));
+    return quitGame;
+  }
+
   @override
   Widget build(BuildContext context) {
     var state = Provider.of<QuizModel>(context, listen: false);
     return WillPopScope(
       onWillPop: () async {
-        state.questionTimer.cancel();
-        state.nextQuestionTimer.cancel();
-        return true;
+        return await quitDialog(state, context);
       },
       child: Consumer<QuizModel>(
         builder: (context, state, child) => state.currentQuestionIndex ==
@@ -27,6 +51,15 @@ class GameUI extends StatelessWidget {
                   centerTitle: true,
                   title: Text('Quiz Master',
                       style: Theme.of(context).textTheme.headline1),
+                  actions: [
+                    IconButton(
+                        onPressed: () async {
+                          await quitDialog(state, context)
+                              ? Navigator.pop(context)
+                              : null;
+                        },
+                        icon: const Icon(Icons.cancel_outlined)),
+                  ],
                 ),
                 body: state.gameState == GameState.init
                     ? const InitGame()

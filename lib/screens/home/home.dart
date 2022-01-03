@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:quizapp/models/quiz.dart';
 import 'package:quizapp/screens/home/highscore.dart';
 import 'package:quizapp/screens/home/profile.dart';
 import 'package:quizapp/screens/quiz/new_game.dart';

@@ -126,11 +126,11 @@ class Highscore extends StatelessWidget {
           tileColor: getListColor(index),
           leading: Text(
             "${index + 1}",
-            style: TextStyle(fontSize: 22, color: Colors.black),
+            style: const TextStyle(fontSize: 22, color: Colors.black),
           ),
           title: document.id == currentUserId
-              ? Text("You",
-                  style: const TextStyle(fontSize: 22, color: Colors.black))
+              ? const Text("You",
+                  style: TextStyle(fontSize: 22, color: Colors.black))
               : Text(
                   '${document["UserName"]}',
                   style: const TextStyle(fontSize: 22, color: Colors.black),

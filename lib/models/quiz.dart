@@ -43,8 +43,8 @@ class QuizModel extends ChangeNotifier {
   List<Question> questionList = [];
   int _points = 0;
   int currentQuestionIndex = 0;
-  Timer? nextQuestionTimer;
-  Timer? questionTimer;
+  Timer nextQuestionTimer = Timer(const Duration(seconds: 1), () {});
+  Timer questionTimer = Timer(const Duration(seconds: 1), () {});
   Timer? initTimer;
   late int _timeCounter;
   int _nextQuestionCounter = 5;

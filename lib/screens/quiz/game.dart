@@ -10,69 +10,78 @@ class GameUI extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<QuizModel>(
-      builder: (context, state, child) => state.currentQuestionIndex ==
-              state.questionList.length
-          ? const GameScore()
-          : Scaffold(
-              appBar: AppBar(
-                automaticallyImplyLeading: false,
-                centerTitle: true,
-                title: Text('Quiz Master',
-                    style: Theme.of(context).textTheme.headline1),
-              ),
-              body: state.gameState == GameState.init
-                  ? const InitGame()
-                  : Container(
-                      margin:
-                          const EdgeInsets.only(top: 50, right: 10, left: 10),
-                      child: Column(
-                        children: [
-                          headerWidget(context),
-                          progressIndicator(context),
-                          Center(
-                            child: Text(
-                              state.questionList[state.currentQuestionIndex]
-                                  .category,
-                              style: const TextStyle(fontSize: 18),
+    var state = Provider.of<QuizModel>(context, listen: false);
+    return WillPopScope(
+      onWillPop: () async {
+        state.questionTimer.cancel();
+        state.nextQuestionTimer.cancel();
+        return true;
+      },
+      child: Consumer<QuizModel>(
+        builder: (context, state, child) => state.currentQuestionIndex ==
+                state.questionList.length
+            ? const GameScore()
+            : Scaffold(
+                appBar: AppBar(
+                  automaticallyImplyLeading: false,
+                  centerTitle: true,
+                  title: Text('Quiz Master',
+                      style: Theme.of(context).textTheme.headline1),
+                ),
+                body: state.gameState == GameState.init
+                    ? const InitGame()
+                    : Container(
+                        margin:
+                            const EdgeInsets.only(top: 50, right: 10, left: 10),
+                        child: Column(
+                          children: [
+                            headerWidget(context),
+                            progressIndicator(context),
+                            Center(
+                              child: Text(
+                                state.questionList[state.currentQuestionIndex]
+                                    .category,
+                                style: const TextStyle(fontSize: 18),
+                              ),
                             ),
-                          ),
-                          Container(
-                              margin: const EdgeInsets.only(top: 20),
-                              child: question(context)),
-                          ListView.builder(
-                            itemCount: state.getQuestion().answers.length,
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                child: Card(
-                                  elevation: 10,
-                                  child: ListTile(
-                                    title: Text(
-                                      HtmlCharacterEntities.decode(
-                                          state.getQuestion().answers[index]),
+                            Container(
+                                margin: const EdgeInsets.only(top: 20),
+                                child: question(context)),
+                            ListView.builder(
+                              itemCount: state.getQuestion().answers.length,
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                  child: Card(
+                                    elevation: 10,
+                                    child: ListTile(
+                                      title: Text(
+                                        HtmlCharacterEntities.decode(
+                                            state.getQuestion().answers[index]),
+                                      ),
+                                      tileColor: state.setColor(index),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(14.0)),
+                                      onTap: () {
+                                        state.timeCounter != 0
+                                            ? state.checkAnswer(state
+                                                .getQuestion()
+                                                .answers[index])
+                                            : null;
+                                      },
                                     ),
-                                    tileColor: state.setColor(index),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(14.0)),
-                                    onTap: () {
-                                      state.timeCounter != 0
-                                          ? state.checkAnswer(state
-                                              .getQuestion()
-                                              .answers[index])
-                                          : null;
-                                    },
                                   ),
-                                ),
-                              );
-                            },
-                          ),
-                        ],
+                                );
+                              },
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-            ),
+              ),
+      ),
     );
   }
 

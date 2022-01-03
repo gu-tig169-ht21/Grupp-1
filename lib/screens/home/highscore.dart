@@ -40,11 +40,7 @@ class Highscore extends StatelessWidget {
 
               return Column(
                 children: [
-                  Container(
-                      height: 150,
-                      color: Colors.blueGrey[800],
-                      child: Center(
-                          child: yourScore(currentUser, currentUserScore))),
+                  Center(child: yourScore(currentUser, currentUserScore)),
                   Expanded(
                     child: Scrollbar(
                       child: ListView.builder(

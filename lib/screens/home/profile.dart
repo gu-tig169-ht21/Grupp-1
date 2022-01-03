@@ -23,7 +23,6 @@ class Profile extends StatelessWidget {
         body: StreamBuilder<DocumentSnapshot>(
             stream: UserService(uid: user.uid).getUserInformation(),
             builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-              // Felhantering om inga data kommer
               if (!snapshot.hasData) {
                 return const Loading();
               }

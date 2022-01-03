@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:quizapp/models/user.dart';
 import 'package:quizapp/screens/shared/constant.dart';
 import 'package:quizapp/screens/shared/loading.dart';
@@ -37,105 +38,115 @@ class _RegisterState extends State<Register> {
               elevation: 0,
             ),
             body: SingleChildScrollView(
+              reverse: true,
               child: Container(
-                margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                margin: const EdgeInsets.fromLTRB(20, 50, 20, 0),
                 child: Form(
                   key: _formKey,
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       const Logo(),
-                      const SizedBox(height: 20),
-                      TextFormField(
-                          validator: (value) =>
-                              value!.isEmpty ? "Enter a username" : null,
-                          onChanged: (value) {
-                            setState(() {
-                              userName = value;
-                            });
-                          },
-                          decoration: textInputDecodartion.copyWith(
-                              icon: const Icon(
-                                Icons.person,
-                                color: Colors.orange,
-                              ),
-                              labelText: "Username")),
-                      const SizedBox(height: 10),
-                      TextFormField(
-                          validator: (value) {
-                            if (!validEmail(value!)) {
-                              return "Enter a valid emal";
-                            }
-                          },
-                          onChanged: (value) {
-                            setState(() {
-                              email = value;
-                            });
-                          },
-                          decoration: textInputDecodartion.copyWith(
-                              icon: const Icon(
-                                Icons.email,
-                                color: Colors.orange,
-                              ),
-                              labelText: "Email")),
-                      const SizedBox(height: 10),
-                      TextFormField(
-                        validator: (value) => value!.length < 6
-                            ? "Minimum 6 characters long password "
-                            : null,
-                        onChanged: (value) {
-                          setState(() {
-                            password = value;
-                          });
-                        },
-                        obscureText: true,
-                        decoration: textInputDecodartion.copyWith(
-                            icon: const Icon(
-                              Icons.lock,
-                              color: Colors.orange,
+                      Container(
+                        margin: const EdgeInsets.only(top: 50),
+                        child: Column(
+                          children: [
+                            TextFormField(
+                                validator: (value) =>
+                                    value!.isEmpty ? "Enter a username" : null,
+                                onChanged: (value) {
+                                  setState(() {
+                                    userName = value;
+                                  });
+                                },
+                                decoration: textInputDecodartion.copyWith(
+                                    icon: const Icon(
+                                      Icons.person,
+                                      color: Colors.orange,
+                                    ),
+                                    labelText: "Username")),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 10, bottom: 10),
+                              child: TextFormField(
+                                  validator: (value) {
+                                    if (!validEmail(value!)) {
+                                      return "Enter a valid emal";
+                                    }
+                                  },
+                                  onChanged: (value) {
+                                    setState(() {
+                                      email = value;
+                                    });
+                                  },
+                                  decoration: textInputDecodartion.copyWith(
+                                      icon: const Icon(
+                                        Icons.email,
+                                        color: Colors.orange,
+                                      ),
+                                      labelText: "Email")),
                             ),
-                            labelText: "Password"),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          error,
-                          style: const TextStyle(color: Colors.red),
+                            TextFormField(
+                              validator: (value) => value!.length < 6
+                                  ? "Minimum 6 characters long password "
+                                  : null,
+                              onChanged: (value) {
+                                setState(() {
+                                  password = value;
+                                });
+                              },
+                              obscureText: true,
+                              decoration: textInputDecodartion.copyWith(
+                                  icon: const Icon(
+                                    Icons.lock,
+                                    color: Colors.orange,
+                                  ),
+                                  labelText: "Password"),
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(height: 70),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          ElevatedButton(
-                            style: elevatedButtonStyle.copyWith(
+                      Padding(
+                        padding: const EdgeInsets.only(top: 30),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            ElevatedButton(
+                              style: elevatedButtonStyle.copyWith(
                                 backgroundColor: MaterialStateProperty.all(
-                                    Colors.orange[800])),
-                            onPressed: () async {
-                              if (_formKey.currentState!.validate()) {
-                                setState(() {
-                                  isLoading = true;
-                                });
-
-                                dynamic result = await _state.register(UserData(
-                                    id: "",
-                                    displayName: userName,
-                                    email: email,
-                                    password: password));
-                                if (result == null) {
+                                    Colors.orange[800]),
+                              ),
+                              onPressed: () async {
+                                if (_formKey.currentState!.validate()) {
                                   setState(() {
-                                    isLoading = false;
-                                    error = "Could not register";
+                                    isLoading = true;
                                   });
-                                } else {
-                                  Navigator.pop(context);
+
+                                  dynamic result = await _state.register(
+                                      UserData(
+                                          displayName: userName,
+                                          email: email,
+                                          password: password));
+
+                                  if (result == null) {
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+
+                                    Fluttertoast.showToast(
+                                        msg: "Registration failed",
+                                        gravity: ToastGravity.TOP);
+                                  } else {
+                                    Navigator.pop(context);
+                                  }
+                                  // Navigator.pop(context);
                                 }
-                                // Navigator.pop(context);
-                              }
-                            },
-                            child: const Text("Register"),
-                          ),
-                        ],
-                      )
+                              },
+                              child: const Text("Register"),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),

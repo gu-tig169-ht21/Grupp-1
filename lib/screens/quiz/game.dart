@@ -23,38 +23,54 @@ class GameUI extends StatelessWidget {
               ),
               body: state.gameState == GameState.init
                   ? const InitGame()
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        headerWidget(context),
-                        progressIndicator(context),
-                        question(context),
-                        Expanded(
-                          child: ListView.builder(
+                  : Container(
+                      margin:
+                          const EdgeInsets.only(top: 50, right: 10, left: 10),
+                      child: Column(
+                        children: [
+                          headerWidget(context),
+                          progressIndicator(context),
+                          Center(
+                            child: Text(
+                              state.questionList[state.currentQuestionIndex]
+                                  .category,
+                              style: const TextStyle(fontSize: 18),
+                            ),
+                          ),
+                          Container(
+                              margin: const EdgeInsets.only(top: 20),
+                              child: question(context)),
+                          ListView.builder(
                             itemCount: state.getQuestion().answers.length,
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
                               return Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 20, bottom: 20),
-                                child: ListTile(
-                                  title: Text(
-                                    HtmlCharacterEntities.decode(
-                                        state.getQuestion().answers[index]),
+                                padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                child: Card(
+                                  elevation: 10,
+                                  child: ListTile(
+                                    title: Text(
+                                      HtmlCharacterEntities.decode(
+                                          state.getQuestion().answers[index]),
+                                    ),
+                                    tileColor: state.setColor(index),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(14.0)),
+                                    onTap: () {
+                                      state.timeCounter != 0
+                                          ? state.checkAnswer(state
+                                              .getQuestion()
+                                              .answers[index])
+                                          : null;
+                                    },
                                   ),
-                                  tileColor: state.setColor(index),
-                                  onTap: () {
-                                    state.timeCounter != 0
-                                        ? state.checkAnswer(
-                                            state.getQuestion().answers[index])
-                                        : null;
-                                  },
                                 ),
                               );
                             },
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
             ),
     );

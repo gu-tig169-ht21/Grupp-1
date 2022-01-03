@@ -31,35 +31,39 @@ class NewGame extends StatelessWidget {
         centerTitle: true,
       ),
       body: Container(
-        margin: const EdgeInsets.fromLTRB(20, 50, 20, 0),
+        margin: const EdgeInsets.only(top: 40, right: 20, left: 20, bottom: 40),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Logo(),
-            const SizedBox(height: 50),
-            Container(
-                alignment: Alignment.topLeft,
-                child: const Text(
-                  "Category",
-                  style: TextStyle(fontSize: 20),
-                )),
-            QuizTypePicker(
-                pickedValue: state.pickedCategory,
-                valueList: state.categoryList,
-                setValue: setCategory),
-            const SizedBox(height: 10),
-            Container(
-                alignment: Alignment.topLeft,
-                child:
-                    const Text("Difficulty", style: TextStyle(fontSize: 20))),
-            QuizTypePicker(
-              pickedValue: state.pickedDifficulty,
-              valueList: state.difficultyList,
-              setValue: setDifficulty,
+            Column(
+              children: [
+                Container(
+                    margin: const EdgeInsets.only(bottom: 5),
+                    alignment: Alignment.topLeft,
+                    child: const Text(
+                      "Category",
+                      style: TextStyle(fontSize: 20),
+                    )),
+                QuizTypePicker(
+                    pickedValue: state.pickedCategory,
+                    valueList: state.categoryList,
+                    setValue: setCategory),
+                Container(
+                    margin: const EdgeInsets.only(top: 15, bottom: 5),
+                    alignment: Alignment.topLeft,
+                    child: const Text("Difficulty",
+                        style: TextStyle(fontSize: 20))),
+                QuizTypePicker(
+                  pickedValue: state.pickedDifficulty,
+                  valueList: state.difficultyList,
+                  setValue: setDifficulty,
+                ),
+              ],
             ),
-            const SizedBox(height: 70),
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  minimumSize: const Size.fromHeight(40),
+                  minimumSize: const Size.fromHeight(70),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20.0),
                   ),
@@ -73,7 +77,7 @@ class NewGame extends StatelessWidget {
                 },
                 child: const Text(
                   'Start Game',
-                  style: TextStyle(color: Colors.white, fontSize: 20),
+                  style: TextStyle(color: Colors.white, fontSize: 30),
                 )),
           ],
         ),

@@ -5,6 +5,7 @@ import 'package:quizapp/screens/authentication/reset_password.dart';
 import 'package:quizapp/screens/shared/constant.dart';
 import 'package:quizapp/screens/shared/loading.dart';
 import 'package:quizapp/screens/shared/logo.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
@@ -24,103 +25,125 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
+    //final isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom != 0;
     return isLoading
         ? const Loading()
         : Scaffold(
-            resizeToAvoidBottomInset: false,
             body: SingleChildScrollView(
+              reverse: true,
               child: Container(
-                margin: const EdgeInsets.fromLTRB(20, 30, 20, 0),
+                margin: const EdgeInsets.only(
+                    top: 120, right: 20, left: 20, bottom: 5),
                 child: Form(
                   key: _formKey,
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       const Logo(),
-                      const SizedBox(
-                        height: 20,
+                      Container(
+                        margin: const EdgeInsets.only(top: 50),
+                        child: Column(
+                          //mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: TextFormField(
+                                validator: (value) =>
+                                    value!.isEmpty ? "Enter email" : null,
+                                onChanged: (value) {
+                                  setState(() {
+                                    email = value;
+                                  });
+                                },
+                                decoration: textInputDecodartion.copyWith(
+                                    icon: const Icon(Icons.email,
+                                        color: Colors.orange),
+                                    labelText: "Email"),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: TextFormField(
+                                  obscureText: true,
+                                  validator: (value) =>
+                                      value!.isEmpty ? "Enter password" : null,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      password = value;
+                                    });
+                                  },
+                                  decoration: textInputDecodartion.copyWith(
+                                      icon: const Icon(Icons.lock,
+                                          color: Colors.orange),
+                                      labelText: "Password")),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const ResetPassword(),
+                                  ),
+                                );
+                              },
+                              child: const Text("Forgot password?"),
+                            ),
+                          ],
+                        ),
                       ),
-                      TextFormField(
-                        validator: (value) =>
-                            value!.isEmpty ? "Enter email" : null,
-                        onChanged: (value) {
-                          setState(() {
-                            email = value;
-                          });
-                        },
-                        decoration: textInputDecodartion.copyWith(
-                            icon: const Icon(Icons.email, color: Colors.orange),
-                            labelText: "Email"),
-                      ),
-                      const SizedBox(height: 10),
-                      TextFormField(
-                          obscureText: true,
-                          validator: (value) =>
-                              value!.isEmpty ? "Enter password" : null,
-                          onChanged: (value) {
-                            setState(() {
-                              password = value;
-                            });
-                          },
-                          decoration: textInputDecodartion.copyWith(
-                              icon:
-                                  const Icon(Icons.lock, color: Colors.orange),
-                              labelText: "Password")),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
-                            onPressed: () async {
-                              await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const ResetPassword(),
-                                ),
-                              );
-                              //print(email);
-                            },
-                            child: const Text("Forgot password?"),
-                          ),
-                        ],
-                      ),
-                      Text(error),
-                      const SizedBox(height: 100),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          ElevatedButton(
-                              style: elevatedButtonStyle.copyWith(
-                                  backgroundColor: MaterialStateProperty.all(
-                                      Colors.orange[800])),
-                              onPressed: () async {
-                                if (_formKey.currentState!.validate()) {
-                                  setState(() {
-                                    isLoading = true;
-                                    error = "Wrong Credentials";
-                                  });
-                                }
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 4),
+                            child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15.0),
+                                  ),
+                                  minimumSize: const Size.fromHeight(
+                                    50,
+                                  ),
+                                ),
+                                onPressed: () async {
+                                  if (_formKey.currentState!.validate()) {
+                                    setState(() {
+                                      isLoading = true;
+                                    });
 
-                                dynamic result =
-                                    await _state.signIn(email, password);
-                                if (result == null) {
-                                  setState(() {
-                                    isLoading = false;
-                                  });
-                                }
-                              },
-                              child: const Text("Sign In")),
-                          ElevatedButton(
-                              style: elevatedButtonStyle.copyWith(
-                                  backgroundColor: MaterialStateProperty.all(
-                                      Colors.indigo[800])),
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const Register()));
-                              },
-                              child: const Text("Register")),
+                                    var result =
+                                        await _state.signIn(email, password);
+                                    if (result == null) {
+                                      setState(() {
+                                        isLoading = false;
+                                        Fluttertoast.showToast(
+                                            msg: "Could not sign in",
+                                            gravity: ToastGravity.TOP);
+                                      });
+                                    }
+                                  }
+                                },
+                                child: const Text(
+                                  "Sign In",
+                                  style: TextStyle(fontSize: 28),
+                                )),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 5),
+                            child: ElevatedButton(
+                                style: elevatedButtonStyle.copyWith(
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Colors.indigo[800])),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const Register()));
+                                },
+                                child: const Text("Register")),
+                          ),
                         ],
                       )
                     ],

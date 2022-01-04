@@ -37,15 +37,15 @@ class GameUI extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var state = Provider.of<QuizModel>(context, listen: false);
-    return WillPopScope(
-      onWillPop: () async {
-        return await quitDialog(state, context);
-      },
-      child: Consumer<QuizModel>(
-        builder: (context, state, child) => state.currentQuestionIndex ==
-                state.questionList.length
-            ? const GameScore()
-            : Scaffold(
+    return Consumer<QuizModel>(
+      builder: (context, state, child) => state.currentQuestionIndex ==
+              state.questionList.length
+          ? const GameScore()
+          : WillPopScope(
+              onWillPop: () async {
+                return await quitDialog(state, context);
+              },
+              child: Scaffold(
                 appBar: AppBar(
                   automaticallyImplyLeading: false,
                   centerTitle: true,
@@ -114,7 +114,7 @@ class GameUI extends StatelessWidget {
                         ),
                       ),
               ),
-      ),
+            ),
     );
   }
 

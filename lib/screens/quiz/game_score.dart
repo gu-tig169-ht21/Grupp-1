@@ -122,12 +122,12 @@ class _GameScoreState extends State<GameScore> {
             size: 170,
           ),
           ListTile(
-            title: const Text("Points received & your new highscore: "),
-            subtitle: Text("$newHighscore p"),
+            title: const Text("Points received & your new highscore: ", style: TextStyle(fontSize: 20)),
+            subtitle: Text("$newHighscore p", style: TextStyle(fontSize: 15)),
           ),
           ListTile(
-            title: const Text("Previous score: "),
-            subtitle: Text("$currentScore p"),
+            title: const Text("Previous score: ", style: TextStyle(fontSize: 20)),
+            subtitle: Text("$currentScore p", style: TextStyle(fontSize: 15)),
           ),
         ],
       ),
@@ -165,12 +165,12 @@ class _GameScoreState extends State<GameScore> {
             size: 170,
           ),
           ListTile(
-            title: const Text("Points received: "),
-            subtitle: Text("$points p"),
+            title: const Text("Points received: ", style: TextStyle(fontSize: 20)),
+            subtitle: Text("$points p", style: TextStyle(fontSize: 15)),
           ),
           ListTile(
-            title: const Text("Current highscore: "),
-            subtitle: Text("$currentScore p"),
+            title: const Text("Current highscore: ", style: TextStyle(fontSize: 20)),
+            subtitle: Text("$currentScore p", style: TextStyle(fontSize: 15)),
           ),
         ],
       ),

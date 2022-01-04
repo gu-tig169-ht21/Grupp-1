@@ -13,7 +13,7 @@ class GameUI extends StatelessWidget {
     await showDialog(
         context: context,
         builder: (context) => AlertDialog(
-              title: const Text("Quit Quiz?"),
+              title: const Text("Quit Quiz?", style: TextStyle(fontSize: 25)),
               actions: [
                 TextButton(
                     onPressed: () {
@@ -23,12 +23,12 @@ class GameUI extends StatelessWidget {
                       quitGame = true;
                       Navigator.pop(context, quitGame);
                     },
-                    child: const Text("Yes")),
+                    child: const Text("Yes", style: TextStyle(fontSize: 15, color: Colors.white))),
                 TextButton(
                     onPressed: () {
                       Navigator.of(context, rootNavigator: false).pop();
                     },
-                    child: const Text("No")),
+                    child: const Text("No", style: TextStyle(fontSize: 15, color: Colors.white))),
               ],
             ));
     return quitGame;

@@ -2,13 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:quizapp/services/quiz_service.dart';
 import 'dart:async';
 
-class Answer {
-  bool? isCorrect;
-
-  Answer({required this.isCorrect});
-}
-
-class Question {
+class Quiz {
   String category;
   String type;
   String difficulty;
@@ -17,7 +11,7 @@ class Question {
   List<dynamic> incorrectAnswers;
   List<String> answers = [];
 
-  Question(
+  Quiz(
       {required this.category,
       required this.type,
       required this.difficulty,
@@ -25,8 +19,8 @@ class Question {
       required this.correctAnswer,
       required this.incorrectAnswers});
 
-  static Question fromJson(dynamic json) {
-    return Question(
+  static Quiz fromJson(dynamic json) {
+    return Quiz(
         category: json['category'],
         type: json['type'],
         difficulty: json['difficulty'],
@@ -40,7 +34,7 @@ class Question {
 enum GameState { ready, init, showQuestion, showColors, quizDone }
 
 class QuizModel extends ChangeNotifier {
-  List<Question> questionList = [];
+  List<Quiz> questionList = [];
   int _points = 0;
   int currentQuestionIndex = 0;
   Timer nextQuestionTimer = Timer(const Duration(seconds: 1), () {});
@@ -64,7 +58,7 @@ class QuizModel extends ChangeNotifier {
   List<String> difficultyList = ['easy', 'medium', 'hard'];
   GameState _gameState = GameState.ready;
 
-  List<Question> get getQuizList => questionList;
+  List<Quiz> get getQuizList => questionList;
   int get points => _points;
   int get timeCounter => _timeCounter;
   int get nextQuestionCounter => _nextQuestionCounter;
@@ -164,7 +158,7 @@ class QuizModel extends ChangeNotifier {
     }
   }
 
-  Question getQuestion() {
+  Quiz getQuestion() {
     return questionList[currentQuestionIndex];
   }
 

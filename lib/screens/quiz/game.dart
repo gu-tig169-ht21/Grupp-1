@@ -13,7 +13,7 @@ class GameUI extends StatelessWidget {
     await showDialog(
         context: context,
         builder: (context) => AlertDialog(
-              title: const Text("Quit Quiz?"),
+              title: const Text("Quit Quiz?", style: TextStyle(fontSize: 25)),
               actions: [
                 TextButton(
                     onPressed: () {
@@ -23,12 +23,12 @@ class GameUI extends StatelessWidget {
                       quitGame = true;
                       Navigator.pop(context, quitGame);
                     },
-                    child: const Text("Yes")),
+                    child: const Text("Yes", style: TextStyle(fontSize: 15, color: Colors.white))),
                 TextButton(
                     onPressed: () {
                       Navigator.of(context, rootNavigator: false).pop();
                     },
-                    child: const Text("No")),
+                    child: const Text("No", style: TextStyle(fontSize: 15, color: Colors.white))),
               ],
             ));
     return quitGame;
@@ -37,15 +37,15 @@ class GameUI extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var state = Provider.of<QuizModel>(context, listen: false);
-    return WillPopScope(
-      onWillPop: () async {
-        return await quitDialog(state, context);
-      },
-      child: Consumer<QuizModel>(
-        builder: (context, state, child) => state.currentQuestionIndex ==
-                state.questionList.length
-            ? const GameScore()
-            : Scaffold(
+    return Consumer<QuizModel>(
+      builder: (context, state, child) => state.currentQuestionIndex ==
+              state.questionList.length
+          ? const GameScore()
+          : WillPopScope(
+              onWillPop: () async {
+                return await quitDialog(state, context);
+              },
+              child: Scaffold(
                 appBar: AppBar(
                   automaticallyImplyLeading: false,
                   centerTitle: true,
@@ -114,7 +114,7 @@ class GameUI extends StatelessWidget {
                         ),
                       ),
               ),
-      ),
+            ),
     );
   }
 

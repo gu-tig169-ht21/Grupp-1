@@ -87,7 +87,7 @@ class _SignInState extends State<SignIn> {
                                   ),
                                 );
                               },
-                              child: const Text("Forgot password?"),
+                              child: const Text("Forgot password?", style: TextStyle(color: Colors.white)),
                             ),
                           ],
                         ),
@@ -134,7 +134,7 @@ class _SignInState extends State<SignIn> {
                             child: ElevatedButton(
                                 style: elevatedButtonStyle.copyWith(
                                     backgroundColor: MaterialStateProperty.all(
-                                        Colors.indigo[800])),
+                                        Colors.grey[600])),
                                 onPressed: () {
                                   Navigator.push(
                                       context,

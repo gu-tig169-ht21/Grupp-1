@@ -73,7 +73,7 @@ class NewGame extends StatelessWidget {
                   await state.getQuiz();
                   state.setGameState(GameState.init);
                   Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => const GameUI()));
+                      MaterialPageRoute(builder: (context) => const Game()));
                 },
                 child: const Text(
                   'Start Game',

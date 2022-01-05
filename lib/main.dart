@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/models/quiz.dart';
 import 'package:quizapp/models/user.dart';
-import 'package:quizapp/screens/quiz/game_score.dart';
 import 'package:quizapp/screens/wrapper.dart';
 import 'package:quizapp/services/auth_service.dart';
 

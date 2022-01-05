@@ -66,7 +66,7 @@ class Home extends StatelessWidget {
     );
   }
 
-  Widget textButtonFormat(context, String title, var screen) {
+  Widget textButtonFormat(BuildContext context, String title, var screen) {
     return Column(
       children: [
         ElevatedButton(

@@ -5,8 +5,8 @@ import 'package:quizapp/models/quiz.dart';
 import 'package:quizapp/screens/quiz/game_score.dart';
 import 'package:quizapp/screens/quiz/init_game.dart';
 
-class GameUI extends StatelessWidget {
-  const GameUI({Key? key}) : super(key: key);
+class Game extends StatelessWidget {
+  const Game({Key? key}) : super(key: key);
 
   Future<bool> quitDialog(QuizModel state, BuildContext context) async {
     bool quitGame = false;
@@ -23,12 +23,14 @@ class GameUI extends StatelessWidget {
                       quitGame = true;
                       Navigator.pop(context, quitGame);
                     },
-                    child: const Text("Yes", style: TextStyle(fontSize: 15, color: Colors.white))),
+                    child: const Text("Yes",
+                        style: TextStyle(fontSize: 15, color: Colors.white))),
                 TextButton(
                     onPressed: () {
                       Navigator.of(context, rootNavigator: false).pop();
                     },
-                    child: const Text("No", style: TextStyle(fontSize: 15, color: Colors.white))),
+                    child: const Text("No",
+                        style: TextStyle(fontSize: 15, color: Colors.white))),
               ],
             ));
     return quitGame;
@@ -36,7 +38,6 @@ class GameUI extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var state = Provider.of<QuizModel>(context, listen: false);
     return Consumer<QuizModel>(
       builder: (context, state, child) => state.currentQuestionIndex ==
               state.questionList.length

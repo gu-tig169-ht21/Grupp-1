@@ -54,8 +54,8 @@ class QuizModel extends ChangeNotifier {
     'Geography',
     'Computers'
   ];
-  String? pickedDifficulty = 'easy';
-  List<String> difficultyList = ['easy', 'medium', 'hard'];
+  String? pickedDifficulty = 'Easy';
+  List<String> difficultyList = ['Easy', 'Medium', 'Hard'];
   GameState _gameState = GameState.ready;
 
   List<Quiz> get getQuizList => questionList;
@@ -120,7 +120,7 @@ class QuizModel extends ChangeNotifier {
       default:
     }
 
-    questionList = await QuizService.getQuiz(categoryId, pickedDifficulty!);
+    questionList = await QuizService.getQuiz(categoryId, pickedDifficulty!.toLowerCase());
 
     for (var item in questionList) {
       item.answers.add(item.correctAnswer);

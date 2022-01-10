@@ -6,9 +6,11 @@ import 'package:quizapp/screens/shared/constant.dart';
 import 'package:quizapp/screens/shared/loading.dart';
 import 'package:quizapp/screens/shared/logo.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:quizapp/services/auth_service.dart';
 
 class SignIn extends StatefulWidget {
-  const SignIn({Key? key}) : super(key: key);
+  SignIn({Key? key}) : super(key: key);
+  final AuthService _auth = AuthService();
 
   @override
   _SignInState createState() => _SignInState();
@@ -20,8 +22,6 @@ class _SignInState extends State<SignIn> {
   bool isLoading = false;
   String error = "";
   final _formKey = GlobalKey<FormState>();
-
-  final UserState _state = UserState();
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +87,8 @@ class _SignInState extends State<SignIn> {
                                   ),
                                 );
                               },
-                              child: const Text("Forgot password?", style: TextStyle(color: Colors.white)),
+                              child: const Text("Forgot password?",
+                                  style: TextStyle(color: Colors.white)),
                             ),
                           ],
                         ),
@@ -111,9 +112,8 @@ class _SignInState extends State<SignIn> {
                                     setState(() {
                                       isLoading = true;
                                     });
-
-                                    var result =
-                                        await _state.signIn(email, password);
+                                    var result = await widget._auth
+                                        .signIn(email, password);
                                     if (result == null) {
                                       setState(() {
                                         isLoading = false;
@@ -139,8 +139,7 @@ class _SignInState extends State<SignIn> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                              const Register()));
+                                          builder: (context) => Register()));
                                 },
                                 child: const Text("Register")),
                           ),

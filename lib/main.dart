@@ -20,7 +20,6 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<QuizModel>(create: (context) => QuizModel()),
-        ChangeNotifierProvider<UserState>(create: (context) => UserState()),
         StreamProvider<AuthUser?>.value(
           value: AuthService().authUser,
           initialData: null,

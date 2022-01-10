@@ -4,9 +4,11 @@ import 'package:quizapp/models/user.dart';
 import 'package:quizapp/screens/shared/constant.dart';
 import 'package:quizapp/screens/shared/loading.dart';
 import 'package:quizapp/screens/shared/logo.dart';
+import 'package:quizapp/services/auth_service.dart';
 
 class Register extends StatefulWidget {
-  const Register({Key? key}) : super(key: key);
+  Register({Key? key}) : super(key: key);
+  final AuthService _auth = AuthService();
 
   @override
   _RegisterState createState() => _RegisterState();
@@ -19,7 +21,6 @@ class _RegisterState extends State<Register> {
   bool isLoading = false;
   String error = "";
   final _formKey = GlobalKey<FormState>();
-  final UserState _state = UserState();
 
   bool validEmail(String email) {
     return RegExp(
@@ -122,8 +123,8 @@ class _RegisterState extends State<Register> {
                                     isLoading = true;
                                   });
 
-                                  dynamic result = await _state.register(
-                                      UserData(
+                                  dynamic result = await widget._auth
+                                      .registerWithWEmail(UserData(
                                           displayName: userName,
                                           email: email,
                                           password: password));

@@ -48,7 +48,7 @@ class ResetPassword extends StatelessWidget {
                   ),
                   style: ButtonStyle(
                       backgroundColor:
-                          MaterialStateProperty.all(Colors.orange)),
+                          MaterialStateProperty.all(Colors.orange[800])),
                 ),
               ),
             ],

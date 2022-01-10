@@ -2,13 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:quizapp/services/quiz_service.dart';
 import 'dart:async';
 
-class Answer {
-  bool? isCorrect;
-
-  Answer({required this.isCorrect});
-}
-
-class Question {
+class Quiz {
   String category;
   String type;
   String difficulty;
@@ -17,7 +11,7 @@ class Question {
   List<dynamic> incorrectAnswers;
   List<String> answers = [];
 
-  Question(
+  Quiz(
       {required this.category,
       required this.type,
       required this.difficulty,
@@ -25,8 +19,8 @@ class Question {
       required this.correctAnswer,
       required this.incorrectAnswers});
 
-  static Question fromJson(dynamic json) {
-    return Question(
+  static Quiz fromJson(dynamic json) {
+    return Quiz(
         category: json['category'],
         type: json['type'],
         difficulty: json['difficulty'],
@@ -40,12 +34,12 @@ class Question {
 enum GameState { ready, init, showQuestion, showColors, quizDone }
 
 class QuizModel extends ChangeNotifier {
-  List<Question> questionList = [];
+  List<Quiz> questionList = [];
   int _points = 0;
   int currentQuestionIndex = 0;
-  Timer? nextQuestionTimer;
-  Timer? questionTimer;
-  Timer? initTimer;
+  Timer nextQuestionTimer = Timer(const Duration(seconds: 1), () {});
+  Timer questionTimer = Timer(const Duration(seconds: 1), () {});
+  Timer initTimer = Timer(const Duration(seconds: 1), () {});
   late int _timeCounter;
   int _nextQuestionCounter = 5;
   late int _startGameCountDown;
@@ -64,7 +58,7 @@ class QuizModel extends ChangeNotifier {
   List<String> difficultyList = ['easy', 'medium', 'hard'];
   GameState _gameState = GameState.ready;
 
-  List<Question> get getQuizList => questionList;
+  List<Quiz> get getQuizList => questionList;
   int get points => _points;
   int get timeCounter => _timeCounter;
   int get nextQuestionCounter => _nextQuestionCounter;
@@ -164,7 +158,7 @@ class QuizModel extends ChangeNotifier {
     }
   }
 
-  Question getQuestion() {
+  Quiz getQuestion() {
     return questionList[currentQuestionIndex];
   }
 
@@ -182,7 +176,7 @@ class QuizModel extends ChangeNotifier {
     }
 
     _timeCounter = 0;
-    questionTimer?.cancel();
+    questionTimer.cancel();
     _nextQuestionCountDown();
 
     setGameState(GameState.showColors);
@@ -219,11 +213,11 @@ class QuizModel extends ChangeNotifier {
           seconds: 1,
         ), (Timer timer) {
       if (_timeCounter == 0) {
-        questionTimer?.cancel();
+        questionTimer.cancel();
         setGameState(GameState.showColors);
         _nextQuestionCountDown();
       } else if (questionList.length == currentQuestionIndex) {
-        questionTimer?.cancel();
+        questionTimer.cancel();
         setGameState(GameState.ready);
       } else {
         _timeCounter--;
@@ -240,10 +234,10 @@ class QuizModel extends ChangeNotifier {
         ), (timer) {
       if (_nextQuestionCounter == 0) {
         nextQuestion();
-        nextQuestionTimer?.cancel();
+        nextQuestionTimer.cancel();
         _countDown();
       } else if (questionList.length == currentQuestionIndex) {
-        nextQuestionTimer?.cancel();
+        nextQuestionTimer.cancel();
         setGameState(GameState.ready);
       } else {
         _nextQuestionCounter--;

@@ -40,11 +40,7 @@ class Highscore extends StatelessWidget {
 
               return Column(
                 children: [
-                  Container(
-                      height: 150,
-                      color: Colors.blueGrey[800],
-                      child: Center(
-                          child: yourScore(currentUser, currentUserScore))),
+                  Center(child: yourScore(currentUser, currentUserScore)),
                   Expanded(
                     child: Scrollbar(
                       child: ListView.builder(
@@ -130,11 +126,11 @@ class Highscore extends StatelessWidget {
           tileColor: getListColor(index),
           leading: Text(
             "${index + 1}",
-            style: TextStyle(fontSize: 22, color: Colors.black),
+            style: const TextStyle(fontSize: 22, color: Colors.black),
           ),
           title: document.id == currentUserId
-              ? Text("You",
-                  style: const TextStyle(fontSize: 22, color: Colors.black))
+              ? const Text("You",
+                  style: TextStyle(fontSize: 22, color: Colors.black))
               : Text(
                   '${document["UserName"]}',
                   style: const TextStyle(fontSize: 22, color: Colors.black),

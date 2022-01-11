@@ -60,7 +60,6 @@ class _GameScoreState extends State<GameScore> {
   @override
   Widget build(BuildContext context) {
     var stateUser = Provider.of<AuthUser>(context);
-    var quizState = Provider.of<QuizModel>(context, listen: false);
     String id = stateUser.uid;
 
     return Consumer<QuizModel>(
@@ -71,14 +70,14 @@ class _GameScoreState extends State<GameScore> {
           centerTitle: true,
         ),
         body: FutureBuilder(
-          future: saveScore(id, quizState.points),
+          future: saveScore(id, state.points),
           builder: (context, newHigh) {
             if (newHigh.data == true) {
-              return newHighscoreView(quizState.points, currentHigh);
+              return newHighscoreView(state.points, currentHigh);
             } else if (newHigh.data == null) {
               return const Loading();
             } else {
-              return noNewHighscoreView(quizState.points, currentHigh);
+              return noNewHighscoreView(state.points, currentHigh);
             }
           },
         ),

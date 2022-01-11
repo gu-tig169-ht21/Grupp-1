@@ -1,6 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:quizapp/services/auth_service.dart';
-
 //Model for Authenticated user
 class AuthUser {
   String uid;

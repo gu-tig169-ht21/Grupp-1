@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:quizapp/models/user.dart';
 import 'package:quizapp/screens/authentication/register.dart';
 import 'package:quizapp/screens/authentication/reset_password.dart';
 import 'package:quizapp/screens/shared/constant.dart';

@@ -31,7 +31,7 @@ class Quiz {
   }
 }
 
-enum GameState { ready, init, showQuestion, showColors, quizDone }
+enum GameState { ready, init, showQuestion, showColors, }
 
 class QuizModel extends ChangeNotifier {
   List<Quiz> questionList = [];

@@ -60,6 +60,7 @@ class Profile extends StatelessWidget {
                         ))),
                         onPressed: () {
                           if (displayName.isNotEmpty) {
+                            FocusScope.of(context).unfocus();
                             UserService(uid: user.uid)
                                 .updateUserName(displayName);
                           }

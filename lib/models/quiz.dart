@@ -31,7 +31,12 @@ class Quiz {
   }
 }
 
-enum GameState { ready, init, showQuestion, showColors, }
+enum GameState {
+  ready,
+  init,
+  showQuestion,
+  showColors,
+}
 
 class QuizModel extends ChangeNotifier {
   List<Quiz> questionList = [];
@@ -120,7 +125,8 @@ class QuizModel extends ChangeNotifier {
       default:
     }
 
-    questionList = await QuizService.getQuiz(categoryId, pickedDifficulty!.toLowerCase());
+    questionList =
+        await QuizService.getQuiz(categoryId, pickedDifficulty!.toLowerCase());
 
     for (var item in questionList) {
       item.answers.add(item.correctAnswer);
@@ -166,9 +172,9 @@ class QuizModel extends ChangeNotifier {
     if (value == questionList[currentQuestionIndex].correctAnswer) {
       int timePoints = _timeCounter;
 
-      if (pickedDifficulty == 'hard') {
+      if (pickedDifficulty == 'Hard') {
         _points = _points + (timePoints * 3);
-      } else if (pickedDifficulty == 'medium') {
+      } else if (pickedDifficulty == 'Medium') {
         _points = _points + (timePoints * 2);
       } else {
         _points = _points + timePoints;

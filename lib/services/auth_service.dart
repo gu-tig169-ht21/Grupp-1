@@ -21,8 +21,6 @@ class AuthService {
         .map((user) => _fromFirebaseUserTocustomUser(user));
   }
 
-  //Logga in
-
   Future signIn(email, password) async {
     try {
       UserCredential result = await _auth.signInWithEmailAndPassword(
@@ -33,9 +31,6 @@ class AuthService {
     }
   }
 
-  // Create a CollectionReference called users that references the firestore collection
-
-  //Registrera mail + lösen
   Future registerWithWEmail(UserData customUser) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
@@ -59,7 +54,6 @@ class AuthService {
 
   Future<void> signOut() async {
     await _auth.signOut();
-    //print("User signedOut");
   }
 
   void sendResetPasswordLink(email) {

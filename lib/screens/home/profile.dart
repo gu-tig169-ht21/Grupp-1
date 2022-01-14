@@ -5,15 +5,27 @@ import 'package:quizapp/models/user.dart';
 import 'package:quizapp/screens/shared/loading.dart';
 import 'package:quizapp/services/user_service.dart';
 
-class Profile extends StatelessWidget {
+class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
 
   @override
+  State<Profile> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
+  final fieldTextController = TextEditingController();
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is removed from the
+    // widget tree.
+    fieldTextController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    String displayName = "";
-
     AuthUser user = Provider.of<AuthUser>(context);
-
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
@@ -26,10 +38,7 @@ class Profile extends StatelessWidget {
               if (!snapshot.hasData) {
                 return const Loading();
               }
-
               final data = snapshot.requireData;
-              final fieldText = TextEditingController();
-
               return Container(
                 margin: const EdgeInsets.all(20),
                 child: Column(
@@ -39,10 +48,7 @@ class Profile extends StatelessWidget {
                     const SizedBox(height: 20),
                     const SizedBox(height: 5),
                     TextField(
-                      controller: fieldText,
-                      onChanged: (value) {
-                        displayName = value;
-                      },
+                      controller: fieldTextController,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(19.0)),
@@ -59,12 +65,12 @@ class Profile extends StatelessWidget {
                           borderRadius: BorderRadius.circular(20.0),
                         ))),
                         onPressed: () {
-                          if (displayName.isNotEmpty) {
+                          if (fieldTextController.text.trim() != "") {
+                            UserService(uid: user.uid).updateUserName(
+                                fieldTextController.text.trim());
                             FocusScope.of(context).unfocus();
-                            UserService(uid: user.uid)
-                                .updateUserName(displayName);
                           }
-                          fieldText.clear();
+                          fieldTextController.clear();
                         },
                         child: const Text("Update"))
                   ],

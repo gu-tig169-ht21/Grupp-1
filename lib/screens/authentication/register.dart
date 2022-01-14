@@ -19,13 +19,17 @@ class _RegisterState extends State<Register> {
   String email = "";
   String password = "";
   bool isLoading = false;
-  String error = "";
   final _formKey = GlobalKey<FormState>();
 
   bool validEmail(String email) {
     return RegExp(
             r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
         .hasMatch(email);
+  }
+
+  bool validPassword(String password) {
+    return RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*?[0-9]).{6,}')
+        .hasMatch(password);
   }
 
   @override
@@ -88,9 +92,11 @@ class _RegisterState extends State<Register> {
                                       labelText: "Email")),
                             ),
                             TextFormField(
-                              validator: (value) => value!.length < 6
-                                  ? "Minimum 6 characters long password "
-                                  : null,
+                              validator: (value) {
+                                if (!validPassword(value!)) {
+                                  return "At least one upper, lower case, & digit is required";
+                                }
+                              },
                               onChanged: (value) {
                                 setState(() {
                                   password = value;
@@ -125,7 +131,7 @@ class _RegisterState extends State<Register> {
 
                                   dynamic result = await widget._auth
                                       .registerWithWEmail(UserData(
-                                          displayName: userName,
+                                          displayName: userName.trim(),
                                           email: email,
                                           password: password));
 

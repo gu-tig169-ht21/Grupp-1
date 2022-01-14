@@ -8,17 +8,7 @@ class UserService {
 
   final FirebaseFirestore databaseReference = FirebaseFirestore.instance;
 
-  //Create new user on register
-  Future registerUser(UserData customUser) async {
-    return await databaseReference.collection("users").doc(customUser.id).set({
-      "id": customUser.id,
-      "email": customUser.email,
-      "UserName": customUser.displayName,
-      "HighScore": customUser.score
-    });
-  }
-
-  //Get users document by ID (Current user)
+  //Get user document by ID (Current user)
   Stream<DocumentSnapshot> getUserInformation() {
     return databaseReference.collection("users").doc(uid).snapshots();
   }

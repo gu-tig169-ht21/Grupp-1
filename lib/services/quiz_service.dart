@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:quizapp/models/quiz.dart';
 
 class QuizService {
-//Get a quiz question
   static Future<List<Quiz>> getQuiz(int category, String difficulty) async {
     var url =
         'https://opentdb.com/api.php?amount=10&category=$category&difficulty=$difficulty';
